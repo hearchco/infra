@@ -13,7 +13,16 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
     }
 
     headers_config {
-      header_behavior = "none"
+      header_behavior = "whitelist"
+      headers {
+        items = [
+          "Accept",
+          "Accept-Language",
+          "Access-Control-Request-Headers",
+          "Access-Control-Request-Method",
+          "Origin",
+        ]
+      }
     }
 
     query_strings_config {
@@ -39,7 +48,16 @@ resource "aws_cloudfront_cache_policy" "cache_policy" {
     }
 
     headers_config {
-      header_behavior = "none"
+      header_behavior = "whitelist"
+      headers {
+        items = [
+          "Accept",
+          "Accept-Language",
+          "Access-Control-Request-Headers",
+          "Access-Control-Request-Method",
+          "Origin",
+        ]
+      }
     }
 
     query_strings_config {
