@@ -3,7 +3,7 @@ variable "function_name" {
   default = "hearchco-lambda"
 }
 
-# Has to be named this for Go runtime to work on Amazon Linux 2 custom runtime
+# has to be named this for Go runtime to work on Amazon Linux 2 custom runtime
 variable "handler" {
   type    = string
   default = "bootstrap"
@@ -30,10 +30,13 @@ variable "source_code_hash" {
   type = string
 }
 
-# If null it will be automatically generated (48-64 characters without special characters)
 variable "proxy_salt" {
   type      = string
   sensitive = true
+  validation {
+    condition     = var.proxy_salt != ""
+    error_message = "proxy_salt must be set"
+  }
 }
 
 variable "environment" {
