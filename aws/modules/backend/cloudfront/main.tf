@@ -26,34 +26,19 @@ resource "aws_cloudfront_distribution" "api_gateway_distribution" {
     target_origin_id       = local.origin_id
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
-
-    forwarded_values {
-      query_string = true
-      cookies {
-        forward = "none"
-      }
-    }
+    cache_policy_id        = aws_cloudfront_cache_policy.default_cache_policy.id
   }
 
   dynamic "ordered_cache_behavior" {
-    for_each = var.paths
+    for_each = var.paths_cache
     content {
       path_pattern           = ordered_cache_behavior.key
       allowed_methods        = var.allowed_methods
       cached_methods         = var.cached_methods
       target_origin_id       = local.origin_id
       viewer_protocol_policy = "redirect-to-https"
-      min_ttl                = ordered_cache_behavior.value.min_ttl
-      default_ttl            = ordered_cache_behavior.value.default_ttl
-      max_ttl                = ordered_cache_behavior.value.max_ttl
       compress               = true
-
-      forwarded_values {
-        query_string = true
-        cookies {
-          forward = "none"
-        }
-      }
+      cache_policy_id        = aws_cloudfront_cache_policy.cache_policy[ordered_cache_behavior.key].id
     }
   }
 

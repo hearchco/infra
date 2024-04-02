@@ -14,15 +14,6 @@ variable "target_domain_name" {
   type = string
 }
 
-variable "paths" {
-  type = map(object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  }))
-  default = {}
-}
-
 variable "allowed_methods" {
   type    = set(string)
   default = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
@@ -31,4 +22,26 @@ variable "allowed_methods" {
 variable "cached_methods" {
   type    = set(string)
   default = ["HEAD", "GET"]
+}
+
+variable "default_cache" {
+  type = object({
+    min_ttl     = number
+    default_ttl = number
+    max_ttl     = number
+  })
+  default = {
+    min_ttl     = 60    // 1 minute
+    default_ttl = 21600 // 6 hours
+    max_ttl     = 86400 // 1 day
+  }
+}
+
+variable "paths_cache" {
+  type = map(object({
+    min_ttl     = number
+    default_ttl = number
+    max_ttl     = number
+  }))
+  default = {}
 }
