@@ -12,8 +12,8 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-resource "aws_iam_role" "iam_for_lambda" {
-  name               = "iam_for_lambda"
+resource "aws_iam_role" "aws_iam_role_exec_lambda" {
+  name               = "aws-iam-role-exec-lambda"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -41,6 +41,6 @@ resource "aws_iam_policy" "lambda_logging" {
 
 # AWSLambdaBasicExecutionRole & Logging
 resource "aws_iam_role_policy_attachment" "lambda_logs" {
-  role       = aws_iam_role.iam_for_lambda.name
+  role       = aws_iam_role.aws_iam_role_exec_lambda.name
   policy_arn = aws_iam_policy.lambda_logging.arn
 }
