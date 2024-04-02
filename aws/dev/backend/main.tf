@@ -60,14 +60,14 @@ module "hearchco_cloudfront" {
   target_domain_name  = module.hearchco_apigateway_eu_central_1.target_domain_name
   acm_certificate_arn = module.hearchco_cdn_certificate.cert_arn
 
-  paths = {
+  paths_cache = {
     "/search" = {
-      min_ttl     = 0
+      min_ttl     = 600    // 10 minutes
       default_ttl = 86400  // 1 day
       max_ttl     = 259200 // 3 days
     },
     "/proxy" = {
-      min_ttl     = 0
+      min_ttl     = 86400   // 1 day
       default_ttl = 1296000 // 15 days
       max_ttl     = 2592000 // 30 days
     },
