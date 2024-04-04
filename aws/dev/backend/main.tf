@@ -10,16 +10,15 @@ terraform {
 }
 
 provider "aws" {
-  profile = local.profile
+  profile = var.aws_profile
   region  = "eu-central-1"
 }
 
 # Global modules
 
 ## Route53 DNS
-module "hearchco_route53" {
-  source      = "../../modules/backend/route53"
-  domain_name = "dev.api.hearch.co"
+data "aws_route53_zone" "hearchco_route53" {
+  name = var.api_domain_name
 }
 
 ## Lambda
@@ -36,7 +35,7 @@ module "lambda_iam" {
 ## Cloudfront
 ### us-east-1 region required for Cloudfront's certificate
 provider "aws" {
-  profile = local.profile
+  profile = var.aws_profile
   region  = "us-east-1"
   alias   = "us-east-1-cdn"
 }
@@ -44,8 +43,8 @@ provider "aws" {
 ### Certificate for the Cloudfront distribution
 module "hearchco_cdn_certificate" {
   source         = "../../modules/backend/acm"
-  domain_name    = local.cdn_domain_name
-  hosted_zone_id = module.hearchco_route53.hosted_zone_id
+  domain_name    = var.api_domain_name
+  hosted_zone_id = data.aws_route53_zone.hearchco_route53.zone_id
 
   providers = {
     aws = aws.us-east-1-cdn
@@ -55,8 +54,8 @@ module "hearchco_cdn_certificate" {
 ### Cloudfront distribution for all API Gateways (in all regions)
 module "hearchco_cloudfront" {
   source              = "../../modules/backend/cloudfront"
-  domain_name         = local.cdn_domain_name
-  hosted_zone_id      = module.hearchco_route53.hosted_zone_id
+  domain_name         = var.api_domain_name
+  hosted_zone_id      = data.aws_route53_zone.hearchco_route53.zone_id
   target_domain_name  = module.hearchco_apigateway_eu_central_1.target_domain_name
   acm_certificate_arn = module.hearchco_cdn_certificate.cert_arn
 

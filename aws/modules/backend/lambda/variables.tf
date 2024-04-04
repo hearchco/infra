@@ -1,6 +1,6 @@
 variable "function_name" {
   type    = string
-  default = "hearchco-lambda"
+  default = "hearchco-api-lambda"
 }
 
 # has to be named this for Go runtime to work on Amazon Linux 2 custom runtime
@@ -35,7 +35,7 @@ variable "proxy_salt" {
   sensitive = true
   validation {
     condition     = var.proxy_salt != ""
-    error_message = "proxy_salt must be set"
+    error_message = "Proxy salt must be set"
   }
 }
 
