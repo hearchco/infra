@@ -1,6 +1,6 @@
 # To create a new region copy this file and rename it to the region name.
 # Afterwards use Find and Replace to replace all occurrences "eu-central-1" with the new region name.
-# Lastly, use Find and Replace to replace all occurrences "eu-central-1" with the new region name.
+# Lastly, use Find and Replace to replace all occurrences "eu_central_1" with the new region name.
 
 provider "aws" {
   profile = var.aws_profile

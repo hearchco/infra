@@ -8,7 +8,8 @@ locals {
   proxy_salt = module.salt.string
 
   # API Gateway
-  api_gateway_domain_name = "gateway.${var.api_domain_name}"
+  api_domain_name         = "api.${var.domain_name}"
+  api_gateway_domain_name = "gateway.${local.api_domain_name}"
   routes = toset([
     "/search",
     "/proxy",

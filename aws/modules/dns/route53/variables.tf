@@ -12,3 +12,13 @@ variable "records_caa" {
     "0 issue \"amazonaws.com\"",
   ]
 }
+
+variable "additional_records" {
+  type = set(object({
+    name    = string
+    type    = string
+    ttl     = optional(number, 86400)
+    records = set(string)
+  }))
+  default = []
+}

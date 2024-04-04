@@ -16,5 +16,5 @@ provider "aws" {
 
 module "hearchco_route53" {
   source      = "../../modules/dns/route53"
-  domain_name = var.api_domain_name
+  domain_name = var.domain_name
 }
