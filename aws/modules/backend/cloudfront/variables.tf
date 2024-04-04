@@ -2,15 +2,20 @@ variable "domain_name" {
   type = string
 }
 
+variable "target_domain_name" {
+  type = string
+}
+
+variable "price_class" {
+  type    = string
+  default = "PriceClass_All"
+}
+
 variable "hosted_zone_id" {
   type = string
 }
 
 variable "acm_certificate_arn" {
-  type = string
-}
-
-variable "target_domain_name" {
   type = string
 }
 

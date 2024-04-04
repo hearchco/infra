@@ -6,6 +6,7 @@ resource "aws_cloudfront_distribution" "api_gateway_distribution" {
   enabled             = true
   is_ipv6_enabled     = true
   wait_for_deployment = true
+  price_class         = var.price_class
   aliases             = [var.domain_name]
 
   origin {

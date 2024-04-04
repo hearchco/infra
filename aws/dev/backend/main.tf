@@ -18,7 +18,7 @@ provider "aws" {
 
 ## Route53 DNS
 data "aws_route53_zone" "hearchco_route53" {
-  name = var.api_domain_name
+  name = var.domain_name
 }
 
 ## Lambda
@@ -43,7 +43,7 @@ provider "aws" {
 ### Certificate for the Cloudfront distribution
 module "hearchco_cdn_certificate" {
   source         = "../../modules/backend/acm"
-  domain_name    = var.api_domain_name
+  domain_name    = local.api_domain_name
   hosted_zone_id = data.aws_route53_zone.hearchco_route53.zone_id
 
   providers = {
@@ -54,10 +54,11 @@ module "hearchco_cdn_certificate" {
 ### Cloudfront distribution for all API Gateways (in all regions)
 module "hearchco_cloudfront" {
   source              = "../../modules/backend/cloudfront"
-  domain_name         = var.api_domain_name
+  domain_name         = local.api_domain_name
   hosted_zone_id      = data.aws_route53_zone.hearchco_route53.zone_id
   target_domain_name  = module.hearchco_apigateway_eu_central_1.target_domain_name
   acm_certificate_arn = module.hearchco_cdn_certificate.cert_arn
+  price_class         = "PriceClass_100"
 
   paths_cache = {
     "/search" = {
