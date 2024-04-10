@@ -19,25 +19,6 @@ module "hearchco_route53" {
   domain_name = var.domain_name
 
   additional_records = [
-    // fly.io
-    {
-      name    = "_acme-challenge.api",
-      type    = "CNAME",
-      ttl     = 60,
-      records = ["api.hearch.co.mmppoz.flydns.net"]
-    },
-    {
-      name    = "_acme-challenge",
-      type    = "CNAME",
-      ttl     = 60,
-      records = ["hearch.co.lp3311.flydns.net"]
-    },
-    {
-      name    = "api",
-      type    = "CNAME",
-      ttl     = 3600,
-      records = ["hearchco.fly.dev"]
-    },
     // email
     {
       name    = "",
