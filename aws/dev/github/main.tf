@@ -21,9 +21,7 @@ module "github_oidc" {
 module "github_backend_deploy" {
   source = "../../modules/github/role"
 
-  name       = "github-auth-backend-deploy"
-  repository = "hearchco/hearchco"
-
+  name = "github-auth-backend-deploy"
   statements = [
     {
       actions = [
