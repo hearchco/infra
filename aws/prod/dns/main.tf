@@ -26,25 +26,6 @@ module "hearchco_route53" {
       ttl     = 3600,
       records = ["76.76.21.21"]
     },
-    // fly.io
-    {
-      name    = "_acme-challenge.api",
-      type    = "CNAME",
-      ttl     = 60,
-      records = ["api.hearch.co.mmppoz.flydns.net"]
-    },
-    {
-      name    = "_acme-challenge",
-      type    = "CNAME",
-      ttl     = 60,
-      records = ["hearch.co.lp3311.flydns.net"]
-    },
-    {
-      name    = "api",
-      type    = "CNAME",
-      ttl     = 3600,
-      records = ["hearchco.fly.dev"]
-    },
     // email
     {
       name    = "",
