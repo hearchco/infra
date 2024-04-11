@@ -18,12 +18,6 @@ module "github_oidc" {
   source = "../../modules/github/oidc"
 }
 
-data "aws_caller_identity" "current" {}
-
-locals {
-  account_id = data.aws_caller_identity.current.account_id
-}
-
 module "github_shared_tf_state" {
   source = "../../modules/github/role"
 
