@@ -23,6 +23,7 @@ module "github_shared_tf_state" {
 
   name       = "github-auth-shared-tf-state"
   repository = "hearchco/hearchco"
+  scope      = "dispatch:deploy-backend"
 
   statements = [
     {

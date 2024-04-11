@@ -18,9 +18,9 @@ variable "repository" {
 }
 
 // to allow all branches use "ref:refs/heads/*", to allow everything from the repo use "*"
+// for dispatched events use "dispatch:<type>"
 variable "scope" {
-  type    = string
-  default = "ref:refs/heads/main"
+  type = string
 }
 
 variable "statements" {
