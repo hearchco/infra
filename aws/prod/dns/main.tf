@@ -19,6 +19,13 @@ module "hearchco_route53" {
   domain_name = var.domain_name
 
   additional_records = [
+    // vercel
+    {
+      name    = "",
+      type    = "A",
+      ttl     = 3600,
+      records = ["76.76.21.21"]
+    },
     // fly.io
     {
       name    = "_acme-challenge.api",
