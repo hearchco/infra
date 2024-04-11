@@ -58,7 +58,7 @@ module "hearchco_cloudfront" {
   hosted_zone_id      = data.aws_route53_zone.hearchco_route53.zone_id
   target_domain_name  = module.hearchco_apigateway_eu_central_1.target_domain_name
   acm_certificate_arn = module.hearchco_cdn_certificate.cert_arn
-  price_class         = "PriceClass_100"
+  price_class         = "PriceClass_All"
 
   paths_cache = {
     "/search" = {
