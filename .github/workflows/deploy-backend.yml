@@ -31,14 +31,15 @@ jobs:
         with:
           role-to-assume: ${{ secrets.TF_SHARED_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
+          output-credentials: true
 
       - name: Configure AWS Credentials File
         run: |
           mkdir -p ~/.aws
           echo "[${{ steps.shared-tf-state.outputs.aws-account-id }}_TFStateLock]" >> ~/.aws/credentials
-          echo "aws_access_key_id=${{ steps.shared-tf-state.outputs.aws-access-key-id }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key=${{ steps.shared-tf-state.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
-          echo "aws_session_token=${{ steps.shared-tf-state.outputs.aws-session-token }}" >> ~/.aws/credentials
+          echo "aws_access_key_id=::add-mask::${{ steps.shared-tf-state.outputs.aws-access-key-id }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=::add-mask::${{ steps.shared-tf-state.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
+          echo "aws_session_token=::add-mask::${{ steps.shared-tf-state.outputs.aws-session-token }}" >> ~/.aws/credentials
 
       ## AWS (prod)
       - name: Configure AWS credentials for deployment (prod)
@@ -48,14 +49,15 @@ jobs:
         with:
           role-to-assume: ${{ secrets.BACKEND_PROD_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
+          output-credentials: true
 
       - name: Configure AWS Credentials File (prod)
         if: github.event.client_payload.environment == 'prod'
         run: |
           echo "[${{ steps.prod-deployment.outputs.aws-account-id }}_Admin]" >> ~/.aws/credentials
-          echo "aws_access_key_id=${{ steps.prod-deployment.outputs.aws-access-key-id }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key=${{ steps.prod-deployment.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
-          echo "aws_session_token=${{ steps.prod-deployment.outputs.aws-session-token }}" >> ~/.aws/credentials
+          echo "aws_access_key_id=::add-mask::${{ steps.prod-deployment.outputs.aws-access-key-id }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=::add-mask::${{ steps.prod-deployment.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
+          echo "aws_session_token=::add-mask::${{ steps.prod-deployment.outputs.aws-session-token }}" >> ~/.aws/credentials
 
       ## AWS (dev)
       - name: Configure AWS credentials for deployment (dev)
@@ -65,14 +67,15 @@ jobs:
         with:
           role-to-assume: ${{ secrets.BACKEND_DEV_ROLE }}
           aws-region: ${{ secrets.AWS_REGION }}
+          output-credentials: true
 
       - name: Configure AWS Credentials File (dev)
         if: github.event.client_payload.environment == 'dev'
         run: |
           echo "[${{ steps.dev-deployment.outputs.aws-account-id }}_Admin]" >> ~/.aws/credentials
-          echo "aws_access_key_id=${{ steps.dev-deployment.outputs.aws-access-key-id }}" >> ~/.aws/credentials
-          echo "aws_secret_access_key=${{ steps.dev-deployment.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
-          echo "aws_session_token=${{ steps.dev-deployment.outputs.aws-session-token }}" >> ~/.aws/credentials
+          echo "aws_access_key_id=::add-mask::${{ steps.dev-deployment.outputs.aws-access-key-id }}" >> ~/.aws/credentials
+          echo "aws_secret_access_key=::add-mask::${{ steps.dev-deployment.outputs.aws-secret-access-key }}" >> ~/.aws/credentials
+          echo "aws_session_token=::add-mask::${{ steps.dev-deployment.outputs.aws-session-token }}" >> ~/.aws/credentials
 
       # Terraform
       - name: Setup Terraform
