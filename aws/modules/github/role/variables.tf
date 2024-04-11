@@ -14,13 +14,14 @@ variable "audience" {
 
 // "<org_name>/<repo_name>"
 variable "repository" {
-  type = string
+  type    = string
+  default = "hearchco/infra"
 }
 
 // to allow all branches use "ref:refs/heads/*", to allow everything from the repo use "*"
-// for dispatched events use "event_type:<event_type_name>"
 variable "scope" {
-  type = string
+  type    = string
+  default = "*"
 }
 
 variable "statements" {

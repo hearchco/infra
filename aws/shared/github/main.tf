@@ -21,10 +21,7 @@ module "github_oidc" {
 module "github_shared_tf_state" {
   source = "../../modules/github/role"
 
-  name       = "github-auth-shared-tf-state"
-  repository = "hearchco/hearchco"
-  scope      = "event_type:deploy-backend"
-
+  name = "github-auth-shared-tf-state"
   statements = [
     {
       actions = [
