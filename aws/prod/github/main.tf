@@ -23,7 +23,7 @@ module "github_backend_deploy" {
 
   name       = "github-auth-backend-deploy"
   repository = "hearchco/hearchco"
-  scope      = "dispatch:deploy-backend"
+  scope      = "event_type:deploy-backend"
 
   statements = [
     {
