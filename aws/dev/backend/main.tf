@@ -29,7 +29,10 @@ module "salt" {
 
 ### IAM for lambda execution and logging
 module "lambda_iam" {
-  source = "../../modules/backend/lambda_iam"
+  source = "../../modules/universal/lambda_iam"
+
+  role_name   = "aws-iam-role-exec-hearchco-api"
+  policy_name = "hearchco_api_logging"
 }
 
 ## Cloudfront
@@ -42,7 +45,7 @@ provider "aws" {
 
 ### Certificate for the Cloudfront distribution
 module "hearchco_cdn_certificate" {
-  source         = "../../modules/backend/acm"
+  source         = "../../modules/universal/acm"
   domain_name    = local.api_domain_name
   hosted_zone_id = data.aws_route53_zone.hearchco_route53.zone_id
 

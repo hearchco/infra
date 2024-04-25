@@ -9,7 +9,9 @@ provider "aws" {
 }
 
 module "hearchco_s3_ca_central_1" {
-  source = "../../modules/backend/s3"
+  source      = "../../modules/universal/s3_source_code"
+  source_name = "bootstrap"
+  bucket_name = "hearchco-api-binary"
 
   providers = {
     aws = aws.ca-central-1
@@ -31,7 +33,7 @@ module "hearchco_lambda_ca_central_1" {
 }
 
 module "hearchco_certificate_ca_central_1" {
-  source         = "../../modules/backend/acm"
+  source         = "../../modules/universal/acm"
   domain_name    = local.api_gateway_domain_name
   hosted_zone_id = data.aws_route53_zone.hearchco_route53.zone_id
 
