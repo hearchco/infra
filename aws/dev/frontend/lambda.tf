@@ -5,9 +5,9 @@ module "hearchco_env_injection" {
 
 module "hearchco_s3_source_code" {
   source      = "../../modules/universal/s3_source_code"
-  source_name = "index.mjs"
   bucket_name = "hearchco-ssr-function"
-  path        = "tmp/lambda"
+  filename    = module.hearchco_env_injection.filename
+  path        = module.hearchco_env_injection.path
 
   depends_on = [module.hearchco_env_injection]
 

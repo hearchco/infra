@@ -1,6 +1,11 @@
+variable "path" {
+  type    = string
+  default = "tmp/lambda"
+}
+
 variable "source_file" {
   type    = string
-  default = "tmp/lambda/index.mjs"
+  default = "index.mjs"
 }
 
 variable "placeholder" {

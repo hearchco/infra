@@ -5,9 +5,9 @@ module "hearchco_env_injection" {
 
 module "hearchco_s3_source_code" {
   source      = "../../modules/universal/s3_source_code"
-  source_name = "index.mjs"
   bucket_name = "hearchco-ssr-function"
-  path        = "tmp/lambda"
+  filename    = module.hearchco_env_injection.filename
+  path        = module.hearchco_env_injection.path
 
   depends_on = [module.hearchco_env_injection]
 
@@ -32,6 +32,8 @@ module "hearchco_lambda_edge" {
   s3_key           = module.hearchco_s3_source_code.s3_key
   source_code_hash = module.hearchco_s3_source_code.source_code_hash
   # environment      = local.environment # Not supported by Lambda@Edge
+
+  depends_on = [module.hearchco_s3_source_code]
 
   providers = {
     aws = aws.us-east-1-cdn

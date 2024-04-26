@@ -13,5 +13,6 @@ locals {
   routes = toset([
     "/search",
     "/proxy",
+    "/healthz"
   ])
 }

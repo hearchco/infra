@@ -48,11 +48,6 @@ resource "aws_cloudfront_distribution" "sveltekit_distribution" {
       viewer_protocol_policy = "redirect-to-https"
       compress               = true
       cache_policy_id        = aws_cloudfront_cache_policy.cache_policy_s3.id
-
-      function_association {
-        event_type   = "viewer-request"
-        function_arn = aws_cloudfront_function.sveltekit-rewriter.arn
-      }
     }
   }
 

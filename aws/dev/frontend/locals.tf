@@ -6,10 +6,4 @@ locals {
     API_URI        = "https://${local.api_domain_name}"
     PUBLIC_API_URI = "https://${local.api_domain_name}"
   })
-
-  # Cloudfront
-  routes = toset([
-    "/search",
-    "/proxy",
-  ])
 }

@@ -65,14 +65,19 @@ module "hearchco_cloudfront" {
 
   paths_cache = {
     "/search" = {
-      min_ttl     = 0
-      default_ttl = 0
-      max_ttl     = 1
+      min_ttl     = 60   // 1 minute
+      default_ttl = 600  // 10 minutes
+      max_ttl     = 3600 // 1 hour
     },
     "/proxy" = {
-      min_ttl     = 5
-      default_ttl = 30
-      max_ttl     = 60
+      min_ttl     = 3600   // 1 hour
+      default_ttl = 86400  // 1 day
+      max_ttl     = 259200 // 3 days
+    },
+    "/healthz" = {
+      min_ttl     = 0
+      default_ttl = 0
+      max_ttl     = 5
     },
   }
 

@@ -12,7 +12,7 @@ provider "aws" {
 
 # module "hearchco_s3_eu_central_2" {
 #   source      = "../../modules/universal/s3_source_code"
-#   source_name = "bootstrap"
+#   filename    = "bootstrap"
 #   bucket_name = "hearchco-api-binary"
 
 #   providers = {

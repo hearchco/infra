@@ -8,11 +8,11 @@ variable "path" {
   default = "tmp"
 }
 
-variable "source_name" {
+variable "filename" {
   type = string
 
   validation {
-    condition     = var.source_name == "bootstrap" || var.source_name == "index.mjs"
+    condition     = var.filename == "bootstrap" || var.filename == "index.mjs"
     error_message = "Only 'bootstrap' or 'index.mjs' are allowed"
   }
 }

@@ -20,28 +20,16 @@ module "hearchco_cloudfront" {
 
   top_level_assets = module.hearchco_s3_assets.top_level_assets
 
-  default_cache = {
-    min_ttl     = 0
-    default_ttl = 0
-    max_ttl     = 1
-  }
-
-  default_asset_cache = {
-    min_ttl     = 0
-    default_ttl = 0
-    max_ttl     = 1
-  }
-
   paths_cache = {
     "/search" = {
+      min_ttl     = 60   // 1 minute
+      default_ttl = 600  // 10 minutes
+      max_ttl     = 3600 // 1 hour
+    },
+    "/healthz" = {
       min_ttl     = 0
       default_ttl = 0
-      max_ttl     = 1
-    },
-    "/proxy" = {
-      min_ttl     = 5
-      default_ttl = 30
-      max_ttl     = 60
+      max_ttl     = 5
     },
   }
 
