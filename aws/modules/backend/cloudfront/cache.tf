@@ -1,5 +1,5 @@
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
-  name        = "default-cache-policy"
+  name        = "api-default-cache-policy"
   min_ttl     = var.default_cache.min_ttl
   default_ttl = var.default_cache.default_ttl
   max_ttl     = var.default_cache.max_ttl
@@ -34,7 +34,7 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
 resource "aws_cloudfront_cache_policy" "cache_policy" {
   for_each = var.paths_cache
 
-  name        = "cache-policy${replace(each.key, "/", "-")}"
+  name        = "api-cache-policy${replace(each.key, "/", "-")}"
   min_ttl     = each.value.min_ttl
   default_ttl = each.value.default_ttl
   max_ttl     = each.value.max_ttl

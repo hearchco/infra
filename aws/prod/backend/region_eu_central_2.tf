@@ -11,7 +11,9 @@ provider "aws" {
 # CURRENTLY THIS REGION DOESN'T SUPPORT HTTP API GATEWAY
 
 # module "hearchco_s3_eu_central_2" {
-#   source = "../../modules/backend/s3"
+#   source      = "../../modules/universal/s3_source_code"
+#   filename    = "bootstrap"
+#   bucket_name = "hearchco-api-binary"
 
 #   providers = {
 #     aws = aws.eu-central-2
@@ -33,7 +35,7 @@ provider "aws" {
 # }
 
 # module "hearchco_certificate_eu_central_2" {
-#   source         = "../../modules/backend/acm"
+#   source         = "../../modules/universal/acm"
 #   domain_name    = local.api_gateway_domain_name
 #   hosted_zone_id = data.aws_route53_zone.hearchco_route53.zone_id
 
