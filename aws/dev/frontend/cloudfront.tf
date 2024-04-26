@@ -12,7 +12,7 @@ module "hearchco_cloudfront" {
   source              = "../../modules/frontend/cloudfront"
   domain_name         = var.domain_name
   hosted_zone_id      = data.aws_route53_zone.hearchco_route53.zone_id
-  target_domain_name  = module.hearchco_s3_assets.bucket_regional_domain_name
+  target_domain_name  = module.hearchco_s3_assets.bucket_domain_name
   oai_id              = module.hearchco_s3_assets.oai
   lambda_edge_arn     = module.hearchco_lambda_edge.invoke_arn
   acm_certificate_arn = module.hearchco_cdn_certificate.cert_arn
