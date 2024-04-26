@@ -1,4 +1,4 @@
-resource "aws_lambda_function" "api_lambda" {
+resource "aws_lambda_function" "ssr_lambda" {
   function_name = var.function_name
   handler       = var.handler
   runtime       = var.runtime

@@ -38,7 +38,7 @@ variable "source_code_hash" {
 
 variable "architectures" {
   type    = list(string)
-  default = ["arm64"]
+  default = ["x86_64"]
 }
 
 variable "memory_size" {

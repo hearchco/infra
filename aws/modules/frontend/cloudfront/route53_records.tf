@@ -4,8 +4,8 @@ resource "aws_route53_record" "record" {
   zone_id = var.hosted_zone_id
 
   alias {
-    name                   = aws_cloudfront_distribution.api_gateway_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.api_gateway_distribution.hosted_zone_id
+    name                   = aws_cloudfront_distribution.sveltekit_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.sveltekit_distribution.hosted_zone_id
     evaluate_target_health = true
   }
 }
@@ -16,8 +16,8 @@ resource "aws_route53_record" "record_v6" {
   zone_id = var.hosted_zone_id
 
   alias {
-    name                   = aws_cloudfront_distribution.api_gateway_distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.api_gateway_distribution.hosted_zone_id
+    name                   = aws_cloudfront_distribution.sveltekit_distribution.domain_name
+    zone_id                = aws_cloudfront_distribution.sveltekit_distribution.hosted_zone_id
     evaluate_target_health = true
   }
 }

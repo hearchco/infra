@@ -12,21 +12,11 @@ resource "aws_s3_bucket_ownership_controls" "assets" {
 }
 
 # Visibility
-resource "aws_s3_bucket_public_access_block" "assets" {
-  bucket                  = aws_s3_bucket.assets.id
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
-
-  depends_on = [aws_s3_bucket_ownership_controls.assets]
-}
-
 resource "aws_s3_bucket_acl" "assets" {
   bucket = aws_s3_bucket.assets.id
-  acl    = "public-read"
+  acl    = "private"
 
-  depends_on = [aws_s3_bucket_public_access_block.assets]
+  depends_on = [aws_s3_bucket_ownership_controls.assets]
 }
 
 # Versioning
