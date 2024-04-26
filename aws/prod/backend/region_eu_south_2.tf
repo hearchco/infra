@@ -12,8 +12,8 @@ provider "aws" {
 
 # module "hearchco_s3_eu_south_2" {
 #   source      = "../../modules/universal/s3_source_code"
-source_name = "bootstrap"
-bucket_name = "hearchco-api-binary"
+#   source_name = "bootstrap"
+#   bucket_name = "hearchco-api-binary"
 
 #   providers = {
 #     aws = aws.eu-south-2
