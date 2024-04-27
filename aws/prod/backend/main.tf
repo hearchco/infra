@@ -35,6 +35,12 @@ module "lambda_iam" {
   policy_name = "hearchco_api_logging"
 }
 
+### Archived source code for Lambda
+module "hearchco_archiver" {
+  source   = "../../modules/universal/archive_source_code"
+  filename = "bootstrap"
+}
+
 ## Cloudfront
 ### us-east-1 region required for Cloudfront's certificate
 provider "aws" {
