@@ -41,13 +41,13 @@ variable "architectures" {
   default = ["x86_64"]
 }
 
-# SvelteKit used around 114MB and crashed, so it's better to have it at least 160MB
+# SvelteKit used around 114MB and crashed, so it's better to have it at least 192MB
 variable "memory_size" {
   type    = number
-  default = 160
+  default = 192
 }
 
 variable "timeout" {
   type    = number
-  default = 5
+  default = 7
 }

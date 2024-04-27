@@ -11,10 +11,12 @@ provider "aws" {
 # CURRENTLY THIS REGION DOESN'T SUPPORT HTTP API GATEWAY
 
 # module "hearchco_s3_eu_south_2" {
-#   source      = "../../modules/universal/s3_source_code"
-#   filename    = "bootstrap"
-#   bucket_name = "hearchco-api-binary"
-
+#   source               = "../../modules/universal/s3_source_code"
+#   bucket_name          = "hearchco-api-binary"
+#   filename             = module.hearchco_archiver.filename
+#   archive_path         = module.hearchco_archiver.output_path
+#   archive_base64sha256 = module.hearchco_archiver.output_base64sha256
+# 
 #   providers = {
 #     aws = aws.eu-south-2
 #   }
