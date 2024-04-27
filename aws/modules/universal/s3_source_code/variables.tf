@@ -3,9 +3,12 @@ variable "bucket_name" {
   type = string
 }
 
-variable "path" {
-  type    = string
-  default = "tmp"
+variable "archive_path" {
+  type = string
+}
+
+variable "archive_base64sha256" {
+  type = string
 }
 
 variable "filename" {
