@@ -17,6 +17,7 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
       headers {
         items = [
           "Accept",
+          # "Accept-Encoding", # Already included
           "Accept-Language",
           "Access-Control-Request-Headers",
           "Access-Control-Request-Method",
@@ -52,6 +53,7 @@ resource "aws_cloudfront_cache_policy" "cache_policy" {
       headers {
         items = [
           "Accept",
+          # "Accept-Encoding", # Already included
           "Accept-Language",
           "Access-Control-Request-Headers",
           "Access-Control-Request-Method",
