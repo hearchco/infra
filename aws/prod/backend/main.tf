@@ -24,7 +24,17 @@ data "aws_route53_zone" "hearchco_route53" {
 ## Lambda
 ### Random string for proxy salt
 module "salt" {
-  source = "../../modules/backend/random"
+  source = "../../modules/universal/random"
+}
+
+### Random suffix for S3 source code name
+module "s3_source_code_suffix" {
+  source = "../../modules/universal/random"
+
+  min_chars = 6
+  max_chars = 10
+  upper     = false
+  special   = false
 }
 
 ### IAM for lambda execution and logging

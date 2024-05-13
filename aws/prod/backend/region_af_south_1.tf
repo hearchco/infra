@@ -11,6 +11,7 @@ provider "aws" {
 module "hearchco_s3_af_south_1" {
   source               = "../../modules/universal/s3_source_code"
   bucket_name          = "hearchco-api-binary"
+  bucket_name_suffix   = module.s3_source_code_suffix.string
   filename             = module.hearchco_archiver.filename
   archive_path         = module.hearchco_archiver.output_path
   archive_base64sha256 = module.hearchco_archiver.output_base64sha256

@@ -2,8 +2,6 @@ data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
 locals {
-  bucket_name = "${var.bucket_name}-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
-
   assets = fileset(var.path, "**/*")
 
   assets_with_content_type = {
