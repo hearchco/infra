@@ -1,3 +1,12 @@
+module "s3_source_code_suffix" {
+  source = "../../modules/universal/random"
+
+  min_chars = 6
+  max_chars = 10
+  upper     = false
+  special   = false
+}
+
 module "hearchco_env_injection" {
   source      = "../../modules/frontend/env_injection"
   environment = local.environment
@@ -13,6 +22,7 @@ module "hearchco_archiver" {
 module "hearchco_s3_source_code" {
   source               = "../../modules/universal/s3_source_code"
   bucket_name          = "hearchco-ssr-function"
+  bucket_name_suffix   = module.s3_source_code_suffix.string
   filename             = module.hearchco_archiver.filename
   archive_path         = module.hearchco_archiver.output_path
   archive_base64sha256 = module.hearchco_archiver.output_base64sha256
