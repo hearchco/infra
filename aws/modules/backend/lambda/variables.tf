@@ -57,10 +57,10 @@ variable "architectures" {
 
 variable "memory_size" {
   type    = number
-  default = 128
+  default = 1769
 }
 
 variable "timeout" {
   type    = number
-  default = 6
+  default = 10
 }
