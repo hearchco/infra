@@ -3,6 +3,12 @@ variable "bucket_name" {
   type = string
 }
 
+variable "bucket_name_suffix" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
 variable "archive_path" {
   type = string
 }

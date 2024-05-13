@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "assets" {
-  bucket = local.bucket_name
+  bucket = var.bucket_name_suffix != "" ? "${var.bucket_name}-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}-${var.bucket_name_suffix}" : "${var.bucket_name}-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
 }
 
 # Ownership

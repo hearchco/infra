@@ -3,6 +3,12 @@ variable "bucket_name" {
   type = string
 }
 
+variable "bucket_name_suffix" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
 variable "path" {
   type    = string
   default = "tmp/s3"
