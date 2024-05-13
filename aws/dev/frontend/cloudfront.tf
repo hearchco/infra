@@ -22,9 +22,9 @@ module "hearchco_cloudfront" {
 
   paths_cache = {
     "/search" = {
-      min_ttl     = 60   // 1 minute
-      default_ttl = 600  // 10 minutes
-      max_ttl     = 3600 // 1 hour
+      min_ttl     = 5   // 5 seconds
+      default_ttl = 300 // 5 minutes
+      max_ttl     = 300 // 5 minutes
     },
     "/healthz" = {
       min_ttl     = 0

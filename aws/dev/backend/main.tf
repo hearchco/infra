@@ -24,7 +24,17 @@ data "aws_route53_zone" "hearchco_route53" {
 ## Lambda
 ### Random string for proxy salt
 module "salt" {
-  source = "../../modules/backend/random"
+  source = "../../modules/universal/random"
+}
+
+### Random suffix for S3 source code name
+module "s3_source_code_suffix" {
+  source = "../../modules/universal/random"
+
+  min_chars = 6
+  max_chars = 10
+  upper     = false
+  special   = false
 }
 
 ### IAM for lambda execution and logging
@@ -33,6 +43,12 @@ module "lambda_iam" {
 
   role_name   = "aws-iam-role-exec-hearchco-api"
   policy_name = "hearchco_api_logging"
+}
+
+### Archived source code for Lambda
+module "hearchco_archiver" {
+  source   = "../../modules/universal/archive_source_code"
+  filename = "bootstrap"
 }
 
 ## Cloudfront
@@ -65,14 +81,14 @@ module "hearchco_cloudfront" {
 
   paths_cache = {
     "/search" = {
-      min_ttl     = 60   // 1 minute
-      default_ttl = 600  // 10 minutes
-      max_ttl     = 3600 // 1 hour
+      min_ttl     = 5   // 5 seconds
+      default_ttl = 300 // 5 minutes
+      max_ttl     = 300 // 5 minutes
     },
     "/proxy" = {
-      min_ttl     = 3600   // 1 hour
-      default_ttl = 86400  // 1 day
-      max_ttl     = 259200 // 3 days
+      min_ttl     = 300  // 5 minutes
+      default_ttl = 3600 // 15 days
+      max_ttl     = 3600 // 1 hour
     },
     "/healthz" = {
       min_ttl     = 0
