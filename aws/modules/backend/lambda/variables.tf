@@ -57,7 +57,7 @@ variable "architectures" {
 
 variable "memory_size" {
   type    = number
-  default = 1769
+  default = 1769 # this is 1vCPU
 }
 
 variable "timeout" {
