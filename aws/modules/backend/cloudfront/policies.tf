@@ -1,5 +1,5 @@
 resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" {
-  name = "ssr-default-origin-request-policy"
+  name = "api-default-origin-request-policy"
 
   cookies_config {
     cookie_behavior = "none"
