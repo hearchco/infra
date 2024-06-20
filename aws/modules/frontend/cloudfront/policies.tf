@@ -1,3 +1,22 @@
+resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" {
+  name = "ssr-default-origin-request-policy"
+
+  cookies_config {
+    cookie_behavior = "none"
+  }
+  
+  headers_config {
+    header_behavior = var.header_behavior
+    headers {
+      items = var.header_items
+    }
+  }
+
+  query_strings_config {
+    query_string_behavior = "all"
+  }
+}
+
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
   name        = "ssr-default-cache-policy"
   min_ttl     = var.default_cache.min_ttl
@@ -13,16 +32,9 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
     }
 
     headers_config {
-      header_behavior = "whitelist"
+      header_behavior = var.header_behavior
       headers {
-        items = [
-          "Accept",
-          # "Accept-Encoding", # Already included
-          "Accept-Language",
-          "Access-Control-Request-Headers",
-          "Access-Control-Request-Method",
-          "Origin",
-        ]
+        items = var.header_items
       }
     }
 
@@ -47,16 +59,9 @@ resource "aws_cloudfront_cache_policy" "cache_policy_s3" {
     }
 
     headers_config {
-      header_behavior = "whitelist"
+      header_behavior = var.header_behavior
       headers {
-        items = [
-          "Accept",
-          # "Accept-Encoding", # Already included
-          "Accept-Language",
-          "Access-Control-Request-Headers",
-          "Access-Control-Request-Method",
-          "Origin",
-        ]
+        items = var.header_items
       }
     }
 
@@ -83,16 +88,9 @@ resource "aws_cloudfront_cache_policy" "cache_policy" {
     }
 
     headers_config {
-      header_behavior = "whitelist"
+      header_behavior = var.header_behavior
       headers {
-        items = [
-          "Accept",
-          # "Accept-Encoding", # Already included
-          "Accept-Language",
-          "Access-Control-Request-Headers",
-          "Access-Control-Request-Method",
-          "Origin",
-        ]
+        items = var.header_items
       }
     }
 

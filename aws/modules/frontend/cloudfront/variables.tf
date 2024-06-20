@@ -52,6 +52,23 @@ variable "cached_methods_s3" {
   default = ["HEAD", "GET"]
 }
 
+variable "header_behavior" {
+  type    = string
+  default = "whitelist"
+}
+
+variable "header_items" {
+  type    = set(string)
+  default = [
+    "Accept",
+    "Accept-Language",
+    "Access-Control-Request-Headers",
+    "Access-Control-Request-Method",
+    "Origin",
+    "X-Forwarded-Host",
+  ]
+}
+
 variable "default_cache" {
   type = object({
     min_ttl     = number
