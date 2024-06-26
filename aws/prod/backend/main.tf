@@ -85,6 +85,11 @@ module "hearchco_cloudfront" {
       default_ttl = 86400  // 1 day
       max_ttl     = 259200 // 3 days
     },
+    "/suggestions" = {
+      min_ttl     = 3600   // 1 hour
+      default_ttl = 86400  // 1 day
+      max_ttl     = 259200 // 3 days
+    },
     "/proxy" = {
       min_ttl     = 86400   // 1 day
       default_ttl = 1296000 // 15 days

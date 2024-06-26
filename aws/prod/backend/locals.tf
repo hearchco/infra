@@ -13,6 +13,7 @@ locals {
   api_gateway_domain_name = "gateway.${local.api_domain_name}"
   routes = toset([
     "/search",
+    "/suggestions",
     "/proxy",
     "/healthz",
     "/versionz"
