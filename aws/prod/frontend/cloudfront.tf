@@ -27,9 +27,9 @@ module "hearchco_cloudfront" {
       max_ttl     = 259200 // 3 days
     },
     "/healthz" = {
-      min_ttl     = 0
-      default_ttl = 0
-      max_ttl     = 5
+      min_ttl     = 5 // 5 seconds
+      default_ttl = 5 // 5 seconds
+      max_ttl     = 5 // 5 seconds
     },
   }
 
