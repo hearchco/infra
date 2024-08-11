@@ -68,8 +68,13 @@ variable "origin_request_header_items" {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "Origin",
-    # "X-Forwarded-Host", # TODO: Check if this header should be included
   ]
+}
+
+variable "additional_origin_request_header_items" {
+  description = "The header items for the CloudFront distribution origin requests"
+  type        = set(string)
+  default     = []
 }
 
 variable "cache_header_behavior" {
@@ -87,8 +92,13 @@ variable "cache_header_items" {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "Origin",
-    # "X-Forwarded-Host", # TODO: Check if this header should be included
   ]
+}
+
+variable "additional_cache_header_items" {
+  description = "Additional header items for the CloudFront distribution cache requests"
+  type        = set(string)
+  default     = []
 }
 
 variable "default_cache_behavior" {

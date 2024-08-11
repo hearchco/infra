@@ -18,6 +18,9 @@ module "cdn" {
   acm_certificate_arn = module.cdn_certificate.cert_arn
   price_class         = var.cloudfront_price_class
 
+  additional_origin_request_header_items = ["X-Forwarded-Host"]
+  additional_cache_header_items          = ["X-Forwarded-Host"]
+
   origins = [
     {
       origin_id   = local.s3_static_assets_origin_id

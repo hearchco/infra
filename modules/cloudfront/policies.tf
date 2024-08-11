@@ -8,7 +8,7 @@ resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" 
   headers_config {
     header_behavior = var.origin_request_header_behavior
     headers {
-      items = var.origin_request_header_items
+      items = local.origin_request_header_items
     }
   }
 
@@ -34,7 +34,7 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
     headers_config {
       header_behavior = var.cache_header_behavior
       headers {
-        items = var.cache_header_items
+        items = local.cache_header_items
       }
     }
 
@@ -68,7 +68,7 @@ resource "aws_cloudfront_cache_policy" "ordered_cache_policy" {
     headers_config {
       header_behavior = var.cache_header_behavior
       headers {
-        items = var.cache_header_items
+        items = local.cache_header_items
       }
     }
 
