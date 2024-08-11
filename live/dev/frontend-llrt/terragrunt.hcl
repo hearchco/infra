@@ -56,6 +56,14 @@ locals {
       }
     },
     {
+      path_pattern = "/"
+      cache_policy = {
+        min_ttl     = "300"
+        default_ttl = "86400"
+        max_ttl     = "86400"
+      }
+    },
+    {
       path_pattern    = "/search"
       allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
       cached_methods  = ["GET", "HEAD"]
