@@ -2,7 +2,7 @@ module "s3_bucket_name_suffix" {
   source = "../../modules/secret-generator"
 
   min_chars = 6
-  max_chars = 10
+  max_chars = 8
   upper     = false
   special   = false
 }
