@@ -1,5 +1,10 @@
 variable "name" {
-  description = "The name of the CloudFront distribution, used for naming resources"
+  description = "The name of the CloudFront distribution"
+  type        = string
+}
+
+variable "domain_name" {
+  description = "The domain name of the CloudFront distribution"
   type        = string
 }
 
@@ -10,11 +15,6 @@ variable "hosted_zone_id" {
 
 variable "acm_certificate_arn" {
   description = "The ARN of the ACM certificate"
-  type        = string
-}
-
-variable "domain_name" {
-  description = "The domain name of the CloudFront distribution"
   type        = string
 }
 
@@ -53,33 +53,13 @@ variable "origins" {
   }
 }
 
-variable "cf_functions" {
-  description = "The Cloudfront v2 functions to associate with the CloudFront distribution"
-  type = set(object({
-    name          = string
-    src_file_path = string
-    event_type    = optional(string, "viewer-request")
-  }))
-  default = []
-}
-
-variable "lambda_functions" {
-  description = "The Lambda@Edge functions to associate with the CloudFront distribution"
-  type = set(object({
-    arn          = string
-    event_type   = optional(string, "origin-request")
-    include_body = optional(bool, true)
-  }))
-  default = []
-}
-
-variable "origin_header_behavior" {
+variable "origin_request_header_behavior" {
   description = "The header behavior for the CloudFront distribution origin requests"
   type        = string
   default     = "whitelist"
 }
 
-variable "origin_header_items" {
+variable "origin_request_header_items" {
   description = "The header items for the CloudFront distribution origin requests"
   type        = set(string)
   default = [
@@ -88,7 +68,7 @@ variable "origin_header_items" {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "Origin",
-    "X-Forwarded-Host",
+    # "X-Forwarded-Host", # TODO: Check if this header should be included
   ]
 }
 
@@ -107,60 +87,63 @@ variable "cache_header_items" {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "Origin",
+    # "X-Forwarded-Host", # TODO: Check if this header should be included
   ]
 }
 
-variable "default_allowed_methods" {
-  description = "The default allowed methods for the CloudFront distribution"
-  type        = set(string)
-  default     = ["HEAD", "GET", "OPTIONS"]
-}
-
-variable "default_cached_methods" {
-  description = "The default cached methods for the CloudFront distribution"
-  type        = set(string)
-  default     = ["HEAD", "GET"]
-}
-
-variable "default_viewer_protocol_policy" {
-  description = "The default viewer protocol policy for the CloudFront distribution"
-  type        = string
-  default     = "redirect-to-https"
-}
-
-variable "default_cache" {
-  description = "The default cache configuration pointing to the first origin of the CloudFront distribution"
+variable "default_cache_behavior" {
+  description = "The default cache behavior of the CloudFront distribution"
   type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  })
-}
-
-variable "ordered_cache_behaviors" {
-  description = "The ordered cache behaviors for the CloudFront distribution"
-  type = set(object({
-    path_pattern           = string
-    allowed_methods        = optional(set(string), ["HEAD", "GET", "OPTIONS"])
-    cached_methods         = optional(set(string), ["HEAD", "GET"])
+    allowed_methods        = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods         = optional(set(string), ["GET", "HEAD"])
     target_origin_id       = string
     viewer_protocol_policy = optional(string, "redirect-to-https")
 
-    function_associations = optional(set(object({
-      event_type    = string
-      function_name = string
-    })), [])
-
-    lambda_function_associations = optional(set(object({
-      lambda_arn   = string
-      event_type   = string
-      include_body = optional(bool, true)
-    })), [])
-
-    policy = object({
+    cache_policy = object({
       min_ttl     = number
       default_ttl = number
       max_ttl     = number
     })
+
+    function_associations = optional(set(object({
+      name          = string
+      src_file_path = string
+      event_type    = optional(string, "viewer-request")
+    })), [])
+
+    lambda_function_associations = optional(set(object({
+      lambda_arn   = string
+      event_type   = optional(string, "origin-request")
+      include_body = optional(bool, true)
+    })), [])
+  })
+}
+
+variable "ordered_cache_behaviors" {
+  description = "The ordered cache behaviors of the CloudFront distribution"
+  type = set(object({
+    path_pattern           = string
+    allowed_methods        = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods         = optional(set(string), ["GET", "HEAD"])
+    target_origin_id       = string
+    viewer_protocol_policy = optional(string, "redirect-to-https")
+
+    cache_policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
+
+    function_associations = optional(set(object({
+      name          = string
+      src_file_path = string
+      event_type    = optional(string, "viewer-request")
+    })), [])
+
+    lambda_function_associations = optional(set(object({
+      lambda_arn   = string
+      event_type   = optional(string, "origin-request")
+      include_body = optional(bool, true)
+    })), [])
   }))
 }

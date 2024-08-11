@@ -1,5 +1,6 @@
 locals {
-  cache_policy_names_map = {
-    for cache_behavior in var.ordered_cache_behaviors : cache_behavior.path_pattern => "${cache_behavior.policy.min_ttl}-${cache_behavior.policy.default_ttl}-${cache_behavior.policy.max_ttl}"
+  policy_names_map = {
+    for behavior in var.ordered_cache_behaviors
+    : behavior.path_pattern => "${behavior.cache_policy.min_ttl}-${behavior.cache_policy.default_ttl}-${behavior.cache_policy.max_ttl}"
   }
 }

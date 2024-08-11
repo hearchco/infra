@@ -25,77 +25,76 @@ locals {
     "us-east-1"
   ]
 
-  default_paths_cache = {
-    min_ttl     = "60"
-    default_ttl = "3600"
-    max_ttl     = "86400"
+  cloudfront_default_cache_behavior = {
+    cache_policy = {
+      min_ttl     = "60"
+      default_ttl = "3600"
+      max_ttl     = "86400"
+    }
   }
 
-  all_allowed_methods  = ["HEAD", "GET", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-  less_allowed_methods = ["HEAD", "GET", "OPTIONS"]
-
-  all_cached_methods  = ["HEAD", "GET", "OPTIONS"]
-  less_cached_methods = ["HEAD", "GET"]
-
-  paths_cache = {
-    "/healthz" = {
-      allowed_methods = local.less_allowed_methods
-      cached_methods  = local.less_cached_methods
-      policy = {
+  cloudfront_ordered_cache_behaviors = [
+    {
+      path_pattern = "/healthz"
+      cache_policy = {
         min_ttl     = "5"
         default_ttl = "5"
         max_ttl     = "5"
       }
     },
-    "/versionz" = {
-      allowed_methods = local.less_allowed_methods
-      cached_methods  = local.less_cached_methods
-      policy = {
+    {
+      path_pattern = "/versionz"
+      cache_policy = {
         min_ttl     = "60"
         default_ttl = "60"
         max_ttl     = "60"
       }
     },
-    "/suggestions" = {
-      allowed_methods = local.all_allowed_methods
-      cached_methods  = local.all_cached_methods
-      policy = {
+    {
+      path_pattern    = "/suggestions"
+      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+      cached_methods  = ["GET", "HEAD"]
+      cache_policy = {
         min_ttl     = "300"
         default_ttl = "3600"
         max_ttl     = "86400"
       }
     },
-    "/search" = {
-      allowed_methods = local.all_allowed_methods
-      cached_methods  = local.all_cached_methods
-      policy = {
+    {
+      path_pattern    = "/search"
+      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+      cached_methods  = ["GET", "HEAD"]
+      cache_policy = {
         min_ttl     = "300"
         default_ttl = "86400"
         max_ttl     = "86400"
       }
     },
-    "/exchange" = {
-      allowed_methods = local.all_allowed_methods
-      cached_methods  = local.all_cached_methods
-      policy = {
+    {
+      path_pattern    = "/exchange"
+      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+      cached_methods  = ["GET", "HEAD"]
+      cache_policy = {
         min_ttl     = "300"
         default_ttl = "86400"
         max_ttl     = "86400"
       }
     },
-    "/currencies" = {
-      allowed_methods = local.less_allowed_methods
-      cached_methods  = local.less_cached_methods
-      policy = {
+    {
+      path_pattern = "/currencies"
+      cache_policy = {
         min_ttl     = "300"
         default_ttl = "86400"
         max_ttl     = "86400"
       }
-    },
-  }
-  paths_without_cache = [for path, _ in local.paths_cache : path]
+    }
+  ]
 
-  lambda_environment = {}
+  apigateway_routes = [for behavior in local.cloudfront_ordered_cache_behaviors : behavior.path_pattern]
+
+  lambda_environment = {
+    "HEARCHCO_SERVER_FRONTENDURLS" = "http://localhost:5173,https://*${local.domain_name}"
+  }
 }
 
 generate "main" {
@@ -120,15 +119,15 @@ inputs = {
   aws_profile    = local.aws_profile
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
 
-  cloudfront_name               = "hearchco-api-cloudfront-${local.environment}"
-  cloudfront_domain_name        = local.domain_name_cloudfront
-  cloudfront_price_class        = "PriceClass_All"
-  cloudfront_default_cache      = local.default_paths_cache
-  cloudfront_custom_paths_cache = local.paths_cache
+  cloudfront_name                    = "hearchco-api-cloudfront-${local.environment}"
+  cloudfront_domain_name             = local.domain_name_cloudfront
+  cloudfront_price_class             = "PriceClass_All"
+  cloudfront_default_cache_behavior  = local.cloudfront_default_cache_behavior
+  cloudfront_ordered_cache_behaviors = local.cloudfront_ordered_cache_behaviors
 
   apigateway_name        = "hearchco-api-api-gateway-${local.environment}"
   apigateway_domain_name = local.domain_name_api_gateway
-  apigateway_routes      = local.paths_without_cache
+  apigateway_routes      = local.apigateway_routes
 
   lambda_src_filepath    = "./tmp/bootstrap"
   lambda_src_bucket_name = "hearchco-api-lambda-src-${local.environment}"

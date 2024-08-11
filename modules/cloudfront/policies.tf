@@ -6,9 +6,9 @@ resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" 
   }
 
   headers_config {
-    header_behavior = var.origin_header_behavior
+    header_behavior = var.origin_request_header_behavior
     headers {
-      items = var.origin_header_items
+      items = var.origin_request_header_items
     }
   }
 
@@ -19,9 +19,9 @@ resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" 
 
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
   name        = "${var.name}-default-cache-policy"
-  min_ttl     = var.default_cache.min_ttl
-  default_ttl = var.default_cache.default_ttl
-  max_ttl     = var.default_cache.max_ttl
+  min_ttl     = var.default_cache_behavior.cache_policy.min_ttl
+  default_ttl = var.default_cache_behavior.cache_policy.default_ttl
+  max_ttl     = var.default_cache_behavior.cache_policy.max_ttl
 
   parameters_in_cache_key_and_forwarded_to_origin {
     enable_accept_encoding_brotli = true
@@ -45,12 +45,17 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
 }
 
 resource "aws_cloudfront_cache_policy" "ordered_cache_policy" {
-  for_each = { for cache_behavior in var.ordered_cache_behaviors : local.cache_policy_names_map[cache_behavior.path_pattern] => cache_behavior.policy... }
+  for_each = {
+    for policy_name, policies in {
+      for behavior in var.ordered_cache_behaviors
+      : local.policy_names_map[behavior.path_pattern] => behavior.cache_policy...
+    } : policy_name => policies[0]
+  }
 
-  name        = "${var.name}-cache-policy-${each.key}"
-  min_ttl     = each.value[0].min_ttl
-  default_ttl = each.value[0].default_ttl
-  max_ttl     = each.value[0].max_ttl
+  name        = "${var.name}-ordered-cache-policy-${each.key}"
+  min_ttl     = each.value.min_ttl
+  default_ttl = each.value.default_ttl
+  max_ttl     = each.value.max_ttl
 
   parameters_in_cache_key_and_forwarded_to_origin {
     enable_accept_encoding_brotli = true

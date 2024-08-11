@@ -31,25 +31,25 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   default_cache_behavior {
-    allowed_methods        = var.default_allowed_methods
-    cached_methods         = var.default_cached_methods
-    target_origin_id       = var.origins[0].origin_id
-    viewer_protocol_policy = var.default_viewer_protocol_policy
+    allowed_methods        = var.default_cache_behavior.allowed_methods
+    cached_methods         = var.default_cache_behavior.cached_methods
+    target_origin_id       = var.default_cache_behavior.target_origin_id
+    viewer_protocol_policy = var.default_cache_behavior.viewer_protocol_policy
     compress               = true
     cache_policy_id        = aws_cloudfront_cache_policy.default_cache_policy.id
 
     dynamic "function_association" {
-      for_each = var.cf_functions
+      for_each = var.default_cache_behavior.function_associations
       content {
+        function_arn = aws_cloudfront_function.cf_functions[function_association.value.name].arn
         event_type   = function_association.value.event_type
-        function_arn = aws_cloudfront_function.functions[function_association.key].arn
       }
     }
 
     dynamic "lambda_function_association" {
-      for_each = var.lambda_functions
+      for_each = var.default_cache_behavior.lambda_function_associations
       content {
-        lambda_arn   = lambda_function_association.value.arn
+        lambda_arn   = lambda_function_association.value.lambda_arn
         event_type   = lambda_function_association.value.event_type
         include_body = lambda_function_association.value.include_body
       }
@@ -57,7 +57,7 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   dynamic "ordered_cache_behavior" {
-    for_each = { for cache_behavior in var.ordered_cache_behaviors : cache_behavior.path_pattern => cache_behavior }
+    for_each = var.ordered_cache_behaviors
     content {
       path_pattern           = ordered_cache_behavior.value.path_pattern
       allowed_methods        = ordered_cache_behavior.value.allowed_methods
@@ -65,20 +65,20 @@ resource "aws_cloudfront_distribution" "cdn" {
       target_origin_id       = ordered_cache_behavior.value.target_origin_id
       viewer_protocol_policy = ordered_cache_behavior.value.viewer_protocol_policy
       compress               = true
-      cache_policy_id        = aws_cloudfront_cache_policy.ordered_cache_policy[local.cache_policy_names_map[ordered_cache_behavior.value.path_pattern]].id
+      cache_policy_id        = aws_cloudfront_cache_policy.ordered_cache_policy[local.policy_names_map[ordered_cache_behavior.value.path_pattern]].id
 
       dynamic "function_association" {
         for_each = ordered_cache_behavior.value.function_associations
         content {
+          function_arn = aws_cloudfront_function.cf_functions[function_association.value.name].arn
           event_type   = function_association.value.event_type
-          function_arn = aws_cloudfront_function.functions[function_association.function_name].arn
         }
       }
 
       dynamic "lambda_function_association" {
         for_each = ordered_cache_behavior.value.lambda_function_associations
         content {
-          lambda_arn   = lambda_function_association.value.arn
+          lambda_arn   = lambda_function_association.value.lambda_arn
           event_type   = lambda_function_association.value.event_type
           include_body = lambda_function_association.value.include_body
         }

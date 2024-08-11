@@ -24,20 +24,28 @@ variable "cloudfront_price_class" {
   type        = string
 }
 
-variable "cloudfront_default_cache" {
-  description = "The default cache configuration for the CloudFront distribution"
+variable "cloudfront_default_cache_behavior" {
+  description = "The default cache behavior of the CloudFront distribution"
   type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
+    allowed_methods = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods  = optional(set(string), ["GET", "HEAD"])
+
+    cache_policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
   })
 }
 
-variable "cloudfront_custom_paths_cache" {
-  type = map(object({
-    allowed_methods = set(string)
-    cached_methods  = set(string)
-    policy = object({
+variable "cloudfront_ordered_cache_behaviors" {
+  description = "The ordered cache behaviors of the CloudFront distribution"
+  type = set(object({
+    path_pattern    = string
+    allowed_methods = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods  = optional(set(string), ["GET", "HEAD"])
+
+    cache_policy = object({
       min_ttl     = number
       default_ttl = number
       max_ttl     = number
