@@ -131,7 +131,7 @@ variable "default_cache_behavior" {
 
 variable "ordered_cache_behaviors" {
   description = "The ordered cache behaviors of the CloudFront distribution"
-  type = set(object({
+  type = list(object({
     path_pattern           = string
     allowed_methods        = optional(set(string), ["GET", "HEAD", "OPTIONS"])
     cached_methods         = optional(set(string), ["GET", "HEAD"])
