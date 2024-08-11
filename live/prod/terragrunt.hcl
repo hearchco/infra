@@ -1,5 +1,5 @@
 locals {
-  aws_profile = ""
+  aws_profile = "730335356331_Admin"
   aws_regions = [
     "af-south-1",
     "ap-east-1",
