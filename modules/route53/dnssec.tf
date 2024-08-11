@@ -10,8 +10,4 @@ resource "aws_route53_hosted_zone_dnssec" "dnssec" {
   count = var.dnssec ? 1 : 0
 
   hosted_zone_id = aws_route53_key_signing_key.dnssec_signing_key[0].hosted_zone_id
-
-  depends_on = [
-    aws_route53_key_signing_key.dnssec_signing_key
-  ]
 }
