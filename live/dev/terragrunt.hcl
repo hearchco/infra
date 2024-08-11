@@ -1,6 +1,10 @@
 locals {
-  environment = "dev"
   aws_profile = "891377085136_Admin"
+  aws_regions = [
+    "eu-central-1",
+    "us-east-1"
+  ]
+  environment = "dev"
   domain_name = local.environment == "prod" ? "hearch.co" : "${local.environment}.hearch.co"
 }
 

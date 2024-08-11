@@ -12,18 +12,13 @@ dependency "dns" {
 }
 
 locals {
-  environment = include.root.locals.environment
   aws_profile = include.root.locals.aws_profile
+  aws_regions = include.root.locals.aws_regions
+  environment = include.root.locals.environment
   domain_name = include.root.locals.domain_name
 
   domain_name_cloudfront  = "api.${local.domain_name}"
   domain_name_api_gateway = "gateway.${local.domain_name_cloudfront}"
-
-  aws_regions = [
-    "eu-central-1",
-    "eu-west-1",
-    "us-east-1"
-  ]
 
   cloudfront_default_cache_behavior = {
     cache_policy = {
@@ -121,7 +116,7 @@ inputs = {
 
   cloudfront_name                    = "hearchco-api-cloudfront-${local.environment}"
   cloudfront_domain_name             = local.domain_name_cloudfront
-  cloudfront_price_class             = "PriceClass_All"
+  cloudfront_price_class             = "PriceClass_100"
   cloudfront_default_cache_behavior  = local.cloudfront_default_cache_behavior
   cloudfront_ordered_cache_behaviors = local.cloudfront_ordered_cache_behaviors
 
@@ -129,7 +124,7 @@ inputs = {
   apigateway_domain_name = local.domain_name_api_gateway
   apigateway_routes      = local.apigateway_routes
 
-  lambda_src_filepath    = "./tmp/bootstrap"
+  lambda_source_file     = "./tmp/bootstrap"
   lambda_src_bucket_name = "hearchco-api-lambda-src-${local.environment}"
   lambda_name            = "hearchco-api-lambda-${local.environment}"
   lambda_architecture    = "arm64"

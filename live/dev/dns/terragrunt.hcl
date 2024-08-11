@@ -8,8 +8,8 @@ terraform {
 }
 
 locals {
-  environment = include.root.locals.environment
   aws_profile = include.root.locals.aws_profile
+  environment = include.root.locals.environment
   domain_name = include.root.locals.domain_name
 
   records = []
