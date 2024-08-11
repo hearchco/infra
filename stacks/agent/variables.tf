@@ -70,7 +70,7 @@ variable "apigateway_routes" {
 }
 
 ##### Lambda variables #####
-variable "lambda_src_filepath" {
+variable "lambda_source_file" {
   description = "The path to the source code file"
   type        = string
 }
@@ -106,7 +106,7 @@ variable "lambda_memory_size" {
 variable "lambda_architecture" {
   description = "The architecture to use for the Lambda function"
   type        = string
-  default     = "x86_64"
+  default     = "arm64"
 }
 
 variable "lambda_environment" {

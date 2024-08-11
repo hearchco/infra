@@ -10,9 +10,9 @@ module "src_archiver" {
   source = "../../modules/source-code-archiver"
 
   source_code = {
-    filepath = var.lambda_src_filepath
+    source_file = var.lambda_source_file
   }
-  output_filepath = var.lambda_src_filepath
+  output_filepath = var.lambda_source_file
 }
 
 module "lambda_iam" {
