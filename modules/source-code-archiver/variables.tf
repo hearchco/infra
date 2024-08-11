@@ -1,17 +1,19 @@
 variable "source_code" {
   description = "Source of the file to archive, either read from provided filepath or using content"
   type = object({
-    filepath         = optional(string)
+    source_dir       = optional(string)
+    source_file      = optional(string)
     content          = optional(string)
     content_filename = optional(string)
   })
 
   validation {
     condition = (
-      (var.source_code.filepath != null && var.source_code.content == null && var.source_code.content_filename == null) ||
-      (var.source_code.filepath == null && var.source_code.content != null && var.source_code.content_filename != null)
+      (var.source_code.source_dir != null && var.source_code.source_file == null && var.source_code.content == null && var.source_code.content_filename == null) ||
+      (var.source_code.source_dir == null && var.source_code.source_file != null && var.source_code.content == null && var.source_code.content_filename == null) ||
+      (var.source_code.source_dir == null && var.source_code.source_file == null && var.source_code.content != null && var.source_code.content_filename != null)
     )
-    error_message = "Either filepath or content must be provided"
+    error_message = "Only one of source_dir, source_file or content (with content_filename) must be provided"
   }
 }
 
