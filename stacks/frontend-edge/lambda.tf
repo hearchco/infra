@@ -19,6 +19,8 @@ module "src_archiver" {
 
   source_code = {
     content = module.src_env_injection.content
+    # Extract the filename from var.lambda_src_filepath (e.g. "src/lambda/index.js" -> "index.js")
+    content_filename = regex("^.*[/](.+)$", var.lambda_src_filepath)[0]
   }
   output_filepath = var.lambda_src_filepath
 }
@@ -31,6 +33,10 @@ module "s3_src" {
   filename             = module.src_archiver.filename
   archive_path         = module.src_archiver.output_path
   archive_base64sha256 = module.src_archiver.output_base64sha256
+
+  providers = {
+    aws = aws.edge
+  }
 }
 
 module "lambda_iam" {
@@ -55,4 +61,8 @@ module "lambda_edge" {
   src_hash      = module.s3_src.source_code_hash
 
   edge = true
+
+  providers = {
+    aws = aws.edge
+  }
 }

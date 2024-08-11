@@ -1,3 +1,8 @@
+variable "aws_profile" {
+  description = "AWS profile to use for CloudFront provider"
+  type        = string
+}
+
 variable "hosted_zone_id" {
   description = "The ID of the hosted zone for the domain name"
   type        = string
@@ -24,30 +29,47 @@ variable "cloudfront_cf_function_path" {
   type        = string
 }
 
-variable "cloudfront_default_cache" {
-  description = "The default cache configuration for the CloudFront distribution"
+variable "cloudfront_default_cache_behavior" {
+  description = "The default cache behavior of the CloudFront distribution"
   type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
+    allowed_methods = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods  = optional(set(string), ["GET", "HEAD"])
+
+    cache_policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
   })
 }
 
-variable "cloudfront_custom_paths_cache" {
-  type = map(object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
+variable "cloudfront_s3_static_cache_behavior" {
+  description = "The cache behavior for the S3 static assets"
+  type = object({
+    allowed_methods = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods  = optional(set(string), ["GET", "HEAD"])
+
+    cache_policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
+  })
+}
+
+variable "cloudfront_ordered_cache_behaviors" {
+  description = "The ordered cache behaviors of the CloudFront distribution"
+  type = set(object({
+    path_pattern    = string
+    allowed_methods = optional(set(string), ["GET", "HEAD", "OPTIONS"])
+    cached_methods  = optional(set(string), ["GET", "HEAD"])
+
+    cache_policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
   }))
-}
-
-variable "cloudfront_s3_static_default_cache" {
-  description = "The default cache configuration for the S3 static bucket"
-  type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  })
 }
 
 ##### Lambda variables #####

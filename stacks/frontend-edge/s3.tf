@@ -13,4 +13,8 @@ module "s3_static_assets_bucket" {
   bucket_name        = var.s3_bucket_name
   bucket_name_suffix = module.s3_static_assets_bucket_name_suffix.string
   assets_path        = var.s3_static_assets_path
+
+  providers = {
+    aws = aws.edge
+  }
 }
