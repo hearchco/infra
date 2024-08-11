@@ -30,36 +30,67 @@ locals {
     default_ttl = "3600"
     max_ttl     = "86400"
   }
+
+  all_allowed_methods  = ["HEAD", "GET", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+  less_allowed_methods = ["HEAD", "GET", "OPTIONS"]
+
+  all_cached_methods  = ["HEAD", "GET", "OPTIONS"]
+  less_cached_methods = ["HEAD", "GET"]
+
   paths_cache = {
     "/healthz" = {
-      min_ttl     = "5"
-      default_ttl = "5"
-      max_ttl     = "5"
+      allowed_methods = local.less_allowed_methods
+      cached_methods  = local.less_cached_methods
+      policy = {
+        min_ttl     = "5"
+        default_ttl = "5"
+        max_ttl     = "5"
+      }
     },
     "/versionz" = {
-      min_ttl     = "60"
-      default_ttl = "60"
-      max_ttl     = "60"
+      allowed_methods = local.less_allowed_methods
+      cached_methods  = local.less_cached_methods
+      policy = {
+        min_ttl     = "60"
+        default_ttl = "60"
+        max_ttl     = "60"
+      }
     },
     "/suggestions" = {
-      min_ttl     = "300"
-      default_ttl = "3600"
-      max_ttl     = "86400"
+      allowed_methods = local.all_allowed_methods
+      cached_methods  = local.all_cached_methods
+      policy = {
+        min_ttl     = "300"
+        default_ttl = "3600"
+        max_ttl     = "86400"
+      }
     },
     "/search" = {
-      min_ttl     = "300"
-      default_ttl = "86400"
-      max_ttl     = "86400"
+      allowed_methods = local.all_allowed_methods
+      cached_methods  = local.all_cached_methods
+      policy = {
+        min_ttl     = "300"
+        default_ttl = "86400"
+        max_ttl     = "86400"
+      }
     },
     "/exchange" = {
-      min_ttl     = "300"
-      default_ttl = "86400"
-      max_ttl     = "86400"
+      allowed_methods = local.all_allowed_methods
+      cached_methods  = local.all_cached_methods
+      policy = {
+        min_ttl     = "300"
+        default_ttl = "86400"
+        max_ttl     = "86400"
+      }
     },
     "/currencies" = {
-      min_ttl     = "300"
-      default_ttl = "86400"
-      max_ttl     = "86400"
+      allowed_methods = local.less_allowed_methods
+      cached_methods  = local.less_cached_methods
+      policy = {
+        min_ttl     = "300"
+        default_ttl = "86400"
+        max_ttl     = "86400"
+      }
     },
   }
   paths_without_cache = [for path, _ in local.paths_cache : path]

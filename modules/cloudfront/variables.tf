@@ -3,23 +3,18 @@ variable "name" {
   type        = string
 }
 
-variable "origin_type" {
-  description = "The type of the origin, either S3 bucket or custom origin"
+variable "hosted_zone_id" {
+  description = "The hosted zone ID of the wanted domain"
   type        = string
+}
 
-  validation {
-    condition     = contains(["s3", "custom"], var.origin_type)
-    error_message = "Origin type must be either 's3' or 'custom'"
-  }
+variable "acm_certificate_arn" {
+  description = "The ARN of the ACM certificate"
+  type        = string
 }
 
 variable "domain_name" {
   description = "The domain name of the CloudFront distribution"
-  type        = string
-}
-
-variable "target_domain_name" {
-  description = "The domain name of the target origin"
   type        = string
 }
 
@@ -28,15 +23,34 @@ variable "price_class" {
   type        = string
 }
 
-variable "hosted_zone_id" {
-  description = "The hosted zone ID of the wanted domain"
-  type        = string
-}
+variable "origins" {
+  description = "The origins of the CloudFront distribution"
+  type = list(object({
+    origin_id   = string
+    origin_type = string
+    domain_name = string
+    s3_oai_id   = optional(string)
+  }))
 
-variable "s3_static_oai_id" {
-  description = "The OAI ID of the S3 static bucket"
-  type        = string
-  default     = null
+  validation {
+    condition     = length(var.origins) > 0
+    error_message = "At least one origin must be provided"
+  }
+
+  validation {
+    condition     = length([for origin in var.origins : origin.origin_id]) == length(distinct([for origin in var.origins : origin.origin_id]))
+    error_message = "Origin IDs must be unique"
+  }
+
+  validation {
+    condition     = alltrue([for origin in var.origins : contains(["s3", "custom"], origin.origin_type)])
+    error_message = "Origin type must be either 's3' or 'custom'"
+  }
+
+  validation {
+    condition     = alltrue([for origin in var.origins : origin.origin_type == "s3" ? (origin.s3_oai_id != null && origin.s3_oai_id != "") : true])
+    error_message = "S3 origins must have 's3_oai_id' attribute"
+  }
 }
 
 variable "cf_functions" {
@@ -59,43 +73,14 @@ variable "lambda_functions" {
   default = []
 }
 
-variable "acm_certificate_arn" {
-  description = "The ARN of the ACM certificate"
-  type        = string
-}
-
-variable "allowed_methods" {
-  description = "The allowed methods for the CloudFront distribution"
-  type        = set(string)
-  default     = ["HEAD", "GET", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"]
-}
-
-variable "cached_methods" {
-  description = "The cached methods for the CloudFront distribution"
-  type        = set(string)
-  default     = ["HEAD", "GET"]
-}
-
-variable "s3_static_allowed_methods" {
-  description = "The allowed methods for the S3 static bucket"
-  type        = set(string)
-  default     = ["HEAD", "GET", "OPTIONS"]
-}
-
-variable "s3_static_cached_methods" {
-  description = "The cached methods for the S3 static bucket"
-  type        = set(string)
-  default     = ["HEAD", "GET"]
-}
-
-variable "header_behavior" {
-  description = "The header behavior for the CloudFront distribution"
+variable "origin_header_behavior" {
+  description = "The header behavior for the CloudFront distribution origin requests"
   type        = string
   default     = "whitelist"
 }
 
-variable "header_items" {
-  description = "The header items for the CloudFront distribution"
+variable "origin_header_items" {
+  description = "The header items for the CloudFront distribution origin requests"
   type        = set(string)
   default = [
     "Accept",
@@ -103,40 +88,79 @@ variable "header_items" {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "Origin",
-    // "X-Forwarded-Host",
+    "X-Forwarded-Host",
   ]
 }
 
-variable "default_cache" {
-  description = "The default cache configuration for the CloudFront distribution"
-  type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  })
+variable "cache_header_behavior" {
+  description = "The header behavior for the CloudFront distribution cache requests"
+  type        = string
+  default     = "whitelist"
 }
 
-variable "custom_paths_cache" {
-  type = map(object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  }))
-  default = {}
-}
-
-variable "s3_static_default_cache" {
-  description = "The default cache configuration for the S3 static bucket"
-  type = object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
-  })
-  default = null
-}
-
-variable "s3_static_top_level_assets" {
-  description = "The top level assets for the S3 static bucket"
+variable "cache_header_items" {
+  description = "The header items for the CloudFront distribution cache requests"
   type        = set(string)
-  default     = []
+  default = [
+    "Accept",
+    "Accept-Language",
+    "Access-Control-Request-Headers",
+    "Access-Control-Request-Method",
+    "Origin",
+  ]
+}
+
+variable "default_allowed_methods" {
+  description = "The default allowed methods for the CloudFront distribution"
+  type        = set(string)
+  default     = ["HEAD", "GET", "OPTIONS"]
+}
+
+variable "default_cached_methods" {
+  description = "The default cached methods for the CloudFront distribution"
+  type        = set(string)
+  default     = ["HEAD", "GET"]
+}
+
+variable "default_viewer_protocol_policy" {
+  description = "The default viewer protocol policy for the CloudFront distribution"
+  type        = string
+  default     = "redirect-to-https"
+}
+
+variable "default_cache" {
+  description = "The default cache configuration pointing to the first origin of the CloudFront distribution"
+  type = object({
+    min_ttl     = number
+    default_ttl = number
+    max_ttl     = number
+  })
+}
+
+variable "ordered_cache_behaviors" {
+  description = "The ordered cache behaviors for the CloudFront distribution"
+  type = set(object({
+    path_pattern           = string
+    allowed_methods        = optional(set(string), ["HEAD", "GET", "OPTIONS"])
+    cached_methods         = optional(set(string), ["HEAD", "GET"])
+    target_origin_id       = string
+    viewer_protocol_policy = optional(string, "redirect-to-https")
+
+    function_associations = optional(set(object({
+      event_type    = string
+      function_name = string
+    })), [])
+
+    lambda_function_associations = optional(set(object({
+      lambda_arn   = string
+      event_type   = string
+      include_body = optional(bool, true)
+    })), [])
+
+    policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
+  }))
 }

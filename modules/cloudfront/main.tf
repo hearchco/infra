@@ -5,33 +5,36 @@ resource "aws_cloudfront_distribution" "cdn" {
   price_class         = var.price_class
   aliases             = [var.domain_name]
 
-  origin {
-    origin_id   = local.origin_id
-    domain_name = var.target_domain_name
+  dynamic "origin" {
+    for_each = { for origin in var.origins : origin.origin_id => origin }
+    content {
+      origin_id   = origin.value.origin_id
+      domain_name = origin.value.domain_name
 
-    dynamic "custom_origin_config" {
-      for_each = var.origin_type == "custom" ? [1] : []
-      content {
-        http_port              = 80
-        https_port             = 443
-        origin_protocol_policy = "https-only"
-        origin_ssl_protocols   = ["TLSv1.2"]
+      dynamic "custom_origin_config" {
+        for_each = origin.value.origin_type == "custom" ? [1] : []
+        content {
+          http_port              = 80
+          https_port             = 443
+          origin_protocol_policy = "https-only"
+          origin_ssl_protocols   = ["TLSv1.2"]
+        }
       }
-    }
 
-    dynamic "s3_origin_config" {
-      for_each = var.origin_type == "s3" ? [1] : []
-      content {
-        origin_access_identity = "origin-access-identity/cloudfront/${var.s3_static_oai_id}"
+      dynamic "s3_origin_config" {
+        for_each = origin.value.origin_type == "s3" ? [1] : []
+        content {
+          origin_access_identity = "origin-access-identity/cloudfront/${origin.value.s3_oai_id}"
+        }
       }
     }
   }
 
   default_cache_behavior {
-    allowed_methods        = var.allowed_methods
-    cached_methods         = var.cached_methods
-    target_origin_id       = local.origin_id
-    viewer_protocol_policy = "redirect-to-https"
+    allowed_methods        = var.default_allowed_methods
+    cached_methods         = var.default_cached_methods
+    target_origin_id       = var.origins[0].origin_id
+    viewer_protocol_policy = var.default_viewer_protocol_policy
     compress               = true
     cache_policy_id        = aws_cloudfront_cache_policy.default_cache_policy.id
 
@@ -54,39 +57,26 @@ resource "aws_cloudfront_distribution" "cdn" {
   }
 
   dynamic "ordered_cache_behavior" {
-    for_each = var.s3_static_top_level_assets
+    for_each = { for cache_behavior in var.ordered_cache_behaviors : cache_behavior.path_pattern => cache_behavior }
     content {
-      path_pattern           = ordered_cache_behavior.key
-      allowed_methods        = var.s3_static_allowed_methods
-      cached_methods         = var.s3_static_cached_methods
-      target_origin_id       = local.origin_id
-      viewer_protocol_policy = "redirect-to-https"
+      path_pattern           = ordered_cache_behavior.value.path_pattern
+      allowed_methods        = ordered_cache_behavior.value.allowed_methods
+      cached_methods         = ordered_cache_behavior.value.cached_methods
+      target_origin_id       = ordered_cache_behavior.value.target_origin_id
+      viewer_protocol_policy = ordered_cache_behavior.value.viewer_protocol_policy
       compress               = true
-      cache_policy_id        = aws_cloudfront_cache_policy.s3_static_default_cache_policy[0].id
-    }
-  }
-
-  dynamic "ordered_cache_behavior" {
-    for_each = var.custom_paths_cache
-    content {
-      path_pattern           = ordered_cache_behavior.key
-      allowed_methods        = var.allowed_methods
-      cached_methods         = var.cached_methods
-      target_origin_id       = local.origin_id
-      viewer_protocol_policy = "redirect-to-https"
-      compress               = true
-      cache_policy_id        = aws_cloudfront_cache_policy.custom_cache_policy[ordered_cache_behavior.key].id
+      cache_policy_id        = aws_cloudfront_cache_policy.ordered_cache_policy[local.cache_policy_names_map[ordered_cache_behavior.value.path_pattern]].id
 
       dynamic "function_association" {
-        for_each = var.cf_functions
+        for_each = ordered_cache_behavior.value.function_associations
         content {
           event_type   = function_association.value.event_type
-          function_arn = aws_cloudfront_function.functions[function_association.key].arn
+          function_arn = aws_cloudfront_function.functions[function_association.function_name].arn
         }
       }
 
       dynamic "lambda_function_association" {
-        for_each = var.lambda_functions
+        for_each = ordered_cache_behavior.value.lambda_function_associations
         content {
           lambda_arn   = lambda_function_association.value.arn
           event_type   = lambda_function_association.value.event_type

@@ -35,9 +35,13 @@ variable "cloudfront_default_cache" {
 
 variable "cloudfront_custom_paths_cache" {
   type = map(object({
-    min_ttl     = number
-    default_ttl = number
-    max_ttl     = number
+    allowed_methods = set(string)
+    cached_methods  = set(string)
+    policy = object({
+      min_ttl     = number
+      default_ttl = number
+      max_ttl     = number
+    })
   }))
 }
 
