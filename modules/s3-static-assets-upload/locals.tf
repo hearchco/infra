@@ -4,8 +4,8 @@ data "aws_caller_identity" "current" {}
 locals {
   bucket_name = var.bucket_name_suffix != "" ? "${var.bucket_name}-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}-${var.bucket_name_suffix}" : "${var.bucket_name}-${data.aws_region.current.name}-${data.aws_caller_identity.current.account_id}"
 
-  // Get a list of all files in the assets folder
-  assets_fileset = fileset(var.assets_path, "**/*")
+  // Get a list of all files in the assets folder, excluding hidden files
+  assets_fileset = fileset(var.assets_path, "**/[!.]*")
 
   // Map of asset file names to their content types
   assets_with_content_type_map = {
