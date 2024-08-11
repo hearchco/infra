@@ -16,6 +16,7 @@ locals {
 }
 
 inputs = {
+  aws_profile = local.aws_profile
   domain_name = local.domain_name
   records     = local.records
 }

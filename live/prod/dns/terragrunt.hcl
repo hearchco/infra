@@ -12,6 +12,7 @@ locals {
   environment = include.root.locals.environment
   domain_name = include.root.locals.domain_name
 
+  dnssec = true
   records = [
     // Email
     {
@@ -67,6 +68,8 @@ locals {
 }
 
 inputs = {
+  aws_profile = local.aws_profile
   domain_name = local.domain_name
   records     = local.records
+  dnssec      = local.dnssec
 }
