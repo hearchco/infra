@@ -7,8 +7,8 @@ provider "aws" {
 module "s3_bucket_name_suffix_${region_underscored}" {
   source = "../../modules/secret-generator"
 
-  min_chars = 6
-  max_chars = 8
+  min_chars = 4
+  max_chars = 6
   upper     = false
   special   = false
 }
