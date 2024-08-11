@@ -22,9 +22,9 @@ locals {
 
   cloudfront_default_cache_behavior = {
     cache_policy = {
-      min_ttl     = "60"
-      default_ttl = "3600"
-      max_ttl     = "86400"
+      min_ttl     = 3600   // 1 hour
+      default_ttl = 86400  // 1 day
+      max_ttl     = 259200 // 3 days
     }
   }
 
@@ -32,17 +32,17 @@ locals {
     {
       path_pattern = "/healthz"
       cache_policy = {
-        min_ttl     = "5"
-        default_ttl = "5"
-        max_ttl     = "5"
+        min_ttl     = 5 // 5 seconds
+        default_ttl = 5 // 5 seconds
+        max_ttl     = 5 // 5 seconds
       }
     },
     {
       path_pattern = "/versionz"
       cache_policy = {
-        min_ttl     = "60"
-        default_ttl = "60"
-        max_ttl     = "60"
+        min_ttl     = 60 // 1 minute
+        default_ttl = 60 // 1 minute
+        max_ttl     = 60 // 1 minute
       }
     },
     {
@@ -50,9 +50,9 @@ locals {
       allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
       cached_methods  = ["GET", "HEAD"]
       cache_policy = {
-        min_ttl     = "300"
-        default_ttl = "3600"
-        max_ttl     = "86400"
+        min_ttl     = 3600   // 1 hour
+        default_ttl = 86400  // 1 day
+        max_ttl     = 259200 // 3 days
       }
     },
     {
@@ -60,9 +60,19 @@ locals {
       allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
       cached_methods  = ["GET", "HEAD"]
       cache_policy = {
-        min_ttl     = "300"
-        default_ttl = "86400"
-        max_ttl     = "86400"
+        min_ttl     = 3600   // 1 hour
+        default_ttl = 86400  // 1 day
+        max_ttl     = 259200 // 3 days
+      }
+    },
+    {
+      path_pattern    = "/proxy"
+      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+      cached_methods  = ["GET", "HEAD"]
+      cache_policy = {
+        min_ttl     = 86400   // 1 day
+        default_ttl = 1296000 // 15 days
+        max_ttl     = 2592000 // 30 days
       }
     },
     // {
@@ -70,17 +80,17 @@ locals {
     //   allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
     //   cached_methods  = ["GET", "HEAD"]
     //   cache_policy = {
-    //     min_ttl     = "300"
-    //     default_ttl = "86400"
-    //     max_ttl     = "86400"
+    //     min_ttl     = 3600   // 1 hour
+    //     default_ttl = 86400  // 1 day
+    //     max_ttl     = 259200 // 3 days
     //   }
     // },
     // {
     //   path_pattern = "/currencies"
     //   cache_policy = {
-    //     min_ttl     = "300"
-    //     default_ttl = "86400"
-    //     max_ttl     = "86400"
+    //     min_ttl     = 3600   // 1 hour
+    //     default_ttl = 86400  // 1 day
+    //     max_ttl     = 259200 // 3 days
     //   }
     // }
   ]
