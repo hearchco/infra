@@ -25,3 +25,9 @@ variable "records_caa" {
     "0 issue \"amazonaws.com\"",
   ]
 }
+
+variable "dnssec" {
+  description = "Whether to enable DNSSEC for the Route53 zone"
+  type        = bool
+  default     = false
+}
