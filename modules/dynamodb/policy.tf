@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "dynamodb_policy_document" {
       "dynamodb:Query",
       "dynamodb:Scan"
     ]
-    resources = ["arn:aws:dynamodb:*:*:table/${aws_dynamodb_table.table.name}"]
+    resources = ["arn:aws:dynamodb:*:*:table/${var.name}"]
   }
 }
 
