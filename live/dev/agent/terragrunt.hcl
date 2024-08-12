@@ -75,24 +75,24 @@ locals {
         max_ttl     = 2592000 // 30 days
       }
     },
-    // {
-    //   path_pattern    = "/exchange"
-    //   allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-    //   cached_methods  = ["GET", "HEAD"]
-    //   cache_policy = {
-    //     min_ttl     = 3600   // 1 hour
-    //     default_ttl = 86400  // 1 day
-    //     max_ttl     = 259200 // 3 days
-    //   }
-    // },
-    // {
-    //   path_pattern = "/currencies"
-    //   cache_policy = {
-    //     min_ttl     = 3600   // 1 hour
-    //     default_ttl = 86400  // 1 day
-    //     max_ttl     = 259200 // 3 days
-    //   }
-    // }
+    {
+      path_pattern    = "/exchange"
+      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
+      cached_methods  = ["GET", "HEAD"]
+      cache_policy = {
+        min_ttl     = 3600   // 1 hour
+        default_ttl = 86400  // 1 day
+        max_ttl     = 259200 // 3 days
+      }
+    },
+    {
+      path_pattern = "/currencies"
+      cache_policy = {
+        min_ttl     = 3600   // 1 hour
+        default_ttl = 86400  // 1 day
+        max_ttl     = 259200 // 3 days
+      }
+    }
   ]
 
   apigateway_routes = [for behavior in local.cloudfront_ordered_cache_behaviors : behavior.path_pattern]
