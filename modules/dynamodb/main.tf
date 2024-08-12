@@ -5,6 +5,7 @@ resource "aws_dynamodb_table" "table" {
   write_capacity = var.write_capacity
   hash_key       = local.hash_key
   range_key      = local.range_key
+  stream_enabled = length(var.replicas) > 0 ? true : false
 
   dynamic "attribute" {
     for_each = var.attributes
