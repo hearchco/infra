@@ -1,0 +1,5 @@
+- [ ] agent: switch to github release binary provider instead of local file
+- [ ] frontend: publish build in github release https://github.com/Shopify/upload-to-release, and ^^
+- [ ] frontend: switch to LLRT custom image on normal lambda instead of edge
+- [ ] ci/cd: digger for both frontend and agent
+- [ ] ci/cd: github dispatches to trigger digger

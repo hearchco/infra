@@ -1,9 +1,6 @@
 # Local .terraform directories
 **/.terraform/*
 
-# .terraform.lock files
-**/.terraform.lock.hcl
-
 # .tfstate files
 *.tfstate
 *.tfstate.*
@@ -38,3 +35,18 @@ terraform.rc
 
 # temporary files
 tmp/
+
+# terragrunt
+.*.sw?
+.idea
+terragrunt.iml
+vendor
+.vscode
+*.out
+.terragrunt-cache
+.bundle
+.ruby-version
+terragrunt
+.DS_Store
+mocks/
+.go-version
