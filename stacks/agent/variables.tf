@@ -3,6 +3,11 @@ variable "aws_profile" {
   type        = string
 }
 
+variable "aws_regions" {
+  description = "The regions to deploy the stack to (used only for DynamoDB global tables)"
+  type        = set(string)
+}
+
 variable "hosted_zone_id" {
   description = "The ID of the hosted zone for the domain name"
   type        = string
@@ -113,4 +118,10 @@ variable "lambda_environment" {
   description = "The environment to pass to the Lambda function"
   type        = map(string)
   sensitive   = true
+}
+
+##### DynamoDB variables #####
+variable "dynamodb_name" {
+  description = "The name of the DynamoDB table"
+  type        = string
 }

@@ -19,3 +19,8 @@ variable "edge" {
   type        = bool
   default     = false
 }
+
+variable "dynamodb_policy_arn" {
+  description = "ARN of the DynamoDB policy to attach to the role"
+  type        = string
+}

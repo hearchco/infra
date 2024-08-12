@@ -1,43 +1,44 @@
-data "aws_iam_policy_document" "lambda_execute" {
+data "aws_iam_policy_document" "policy_document_execute" {
   statement {
-    effect = "Allow"
-
+    effect  = "Allow"
+    actions = ["sts:AssumeRole"]
     principals {
       type        = "Service"
       identifiers = local.identifiers
     }
-
-    actions = ["sts:AssumeRole"]
   }
 }
 
-data "aws_iam_policy_document" "lambda_logging" {
+data "aws_iam_policy_document" "policy_document_logging" {
   statement {
     effect = "Allow"
-
     actions = [
       "logs:CreateLogGroup",
       "logs:CreateLogStream",
       "logs:PutLogEvents",
     ]
-
     resources = ["arn:aws:logs:*:*:*"]
   }
 }
 
-resource "aws_iam_role" "lambda_execute" {
+resource "aws_iam_role" "role" {
   name               = var.role_name
-  assume_role_policy = data.aws_iam_policy_document.lambda_execute.json
+  assume_role_policy = data.aws_iam_policy_document.policy_document_execute.json
 }
 
-resource "aws_iam_policy" "lambda_logging" {
+resource "aws_iam_policy" "policy_logging" {
   name        = var.policy_name
   path        = "/"
-  description = "IAM policy for logging from lambda@edge"
-  policy      = data.aws_iam_policy_document.lambda_logging.json
+  description = "IAM policy for logging by Lambda"
+  policy      = data.aws_iam_policy_document.policy_document_logging.json
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_iam" {
-  role       = aws_iam_role.lambda_execute.name
-  policy_arn = aws_iam_policy.lambda_logging.arn
+resource "aws_iam_role_policy_attachment" "policy_attachment_logging" {
+  role       = aws_iam_role.role.name
+  policy_arn = aws_iam_policy.policy_logging.arn
+}
+
+resource "aws_iam_role_policy_attachment" "policy_attachment_dynamodb" {
+  role       = aws_iam_role.role.name
+  policy_arn = var.dynamodb_policy_arn
 }

@@ -122,6 +122,7 @@ EOF
 
 inputs = {
   aws_profile    = local.aws_profile
+  aws_regions    = local.aws_regions
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
 
   cloudfront_name                    = "hearchco-api-cloudfront-${local.environment}"
@@ -139,4 +140,6 @@ inputs = {
   lambda_name            = "hearchco-api-lambda-${local.environment}"
   lambda_architecture    = "arm64"
   lambda_environment     = local.lambda_environment
+
+  dynamodb_name = "hearchco-api-dynamodb-${local.environment}"
 }

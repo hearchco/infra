@@ -18,6 +18,7 @@ module "src_archiver" {
 module "lambda_iam" {
   source = "../../modules/lambda-iam-role"
 
-  role_name   = local.lambda_iam_role_name
-  policy_name = local.lambda_iam_policy_name
+  role_name           = local.lambda_iam_role_name
+  policy_name         = local.lambda_iam_policy_name
+  dynamodb_policy_arn = module.cache_database.lambda_access_policy_arn
 }
