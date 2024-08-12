@@ -20,5 +20,6 @@ module "lambda_iam" {
 
   role_name           = local.lambda_iam_role_name
   policy_name         = local.lambda_iam_policy_name
+  dynamodb_policy     = true
   dynamodb_policy_arn = module.cache_database.lambda_access_policy_arn
 }
