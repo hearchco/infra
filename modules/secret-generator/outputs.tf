@@ -1,4 +1,4 @@
 output "string" {
-  value     = random_string.string.result
+  value     = random_password.secret.result
   sensitive = true
 }

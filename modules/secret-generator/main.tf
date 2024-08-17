@@ -3,7 +3,7 @@ resource "random_integer" "length" {
   max = var.max_chars
 }
 
-resource "random_string" "string" {
+resource "random_password" "secret" {
   length  = random_integer.length.result
   upper   = var.upper
   lower   = var.lower
