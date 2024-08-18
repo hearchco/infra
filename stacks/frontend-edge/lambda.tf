@@ -11,7 +11,7 @@ module "src_env_injection" {
   source = "../../modules/src-env-injection"
 
   filepath    = var.lambda_src_filepath
-  environment = var.lambda_environment
+  environment = local.lambda_environment
 }
 
 module "src_archiver" {

@@ -133,6 +133,16 @@ variable "lambda_architecture" {
   default     = "arm64"
 }
 
+variable "lambda_agent_api_gateway_domain_name" {
+  description = "The domain name for the API Gateway of Agent API"
+  type        = string
+}
+
+variable "lambda_agent_cloudfront_domain_name" {
+  description = "The domain name for the CloudFront distribution of Agent API"
+  type        = string
+}
+
 variable "lambda_environment" {
   description = "The environment to pass to the Lambda function"
   type        = map(string)
