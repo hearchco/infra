@@ -122,6 +122,7 @@ inputs = {
   lambda_agent_api_gateway_domain_name = local.api_domain_name_api_gateway
   lambda_agent_cloudfront_domain_name  = local.api_domain_name_cloudfront
   lambda_environment                   = local.lambda_environment
+  lambda_keep_warm                     = true
 
   s3_bucket_name        = "hearchco-ssr-s3-static-${local.environment}"
   s3_static_assets_path = "./tmp/s3"

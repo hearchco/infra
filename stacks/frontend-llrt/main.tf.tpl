@@ -37,6 +37,7 @@ module "lambda_${region_underscored}" {
   handler      = var.lambda_handler
   memory_size  = var.lambda_memory_size
   architecture = var.lambda_architecture
+  keep_warm    = var.lambda_keep_warm
 
   src_s3_bucket = module.s3_src_${region_underscored}.bucket_id
   src_s3_key    = module.s3_src_${region_underscored}.s3_key

@@ -144,6 +144,12 @@ variable "lambda_environment" {
   sensitive   = true
 }
 
+variable "lambda_keep_warm" {
+  description = "Whether to keep the Lambda function warm"
+  type        = bool
+  default     = false
+}
+
 ##### S3 variables #####
 variable "s3_bucket_name" {
   description = "The name of the S3 bucket for the static assets"

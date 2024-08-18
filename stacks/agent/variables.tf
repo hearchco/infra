@@ -120,6 +120,12 @@ variable "lambda_environment" {
   sensitive   = true
 }
 
+variable "lambda_keep_warm" {
+  description = "Whether to keep the Lambda function warm"
+  type        = bool
+  default     = false
+}
+
 ##### DynamoDB variables #####
 variable "dynamodb_name" {
   description = "The name of the DynamoDB table"

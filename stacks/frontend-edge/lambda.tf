@@ -53,8 +53,9 @@ module "lambda_edge" {
   name = var.lambda_name
   role = module.lambda_iam.role_arn
 
-  runtime = var.lambda_runtime
-  handler = var.lambda_handler
+  runtime   = var.lambda_runtime
+  handler   = var.lambda_handler
+  keep_warm = false
 
   src_s3_bucket = module.s3_src.bucket_id
   src_s3_key    = module.s3_src.s3_key

@@ -63,3 +63,9 @@ variable "environment" {
   default     = {}
   sensitive   = true
 }
+
+variable "keep_warm" {
+  description = "Whether to keep the Lambda function warm by invoking it every 5 minutes"
+  type        = bool
+  default     = false
+}
