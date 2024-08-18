@@ -140,6 +140,7 @@ inputs = {
   lambda_name            = "hearchco-api-lambda-${local.environment}"
   lambda_architecture    = "arm64"
   lambda_environment     = local.lambda_environment
+  lambda_keep_warm       = false
 
   dynamodb_name = "hearchco-api-dynamodb-${local.environment}"
 }
