@@ -42,7 +42,12 @@ module "lambda_${region_underscored}" {
   src_s3_key    = module.s3_src_${region_underscored}.s3_key
   src_hash      = module.s3_src_${region_underscored}.source_code_hash
 
-  environment = local.lambda_environment
+  environment = merge(
+    {
+      "HEARCHCO_SERVER_CACHE_DYNAMODB_REGION" = "${region_dashed}"
+    },
+    local.lambda_environment
+  )
 
   providers = {
     aws = aws.${region_underscored}
@@ -52,8 +57,9 @@ module "lambda_${region_underscored}" {
 module "apigateway_certificate_${region_underscored}" {
   source = "../../modules/acm-certificate"
 
-  domain_name    = var.apigateway_domain_name
-  hosted_zone_id = var.hosted_zone_id
+  domain_name               = var.apigateway_domain_name
+  subject_alternative_names = [format("%s.%s", "${region_dashed}", var.apigateway_domain_name)]
+  hosted_zone_id            = var.hosted_zone_id
 
   providers = {
     aws = aws.${region_underscored}

@@ -79,11 +79,7 @@ locals {
 
   apigateway_routes = [for behavior in local.cloudfront_ordered_cache_behaviors : behavior.path_pattern]
 
-  lambda_environment = {
-    "PUBLIC_URI"     = "https://${local.domain_name}"
-    "API_URI"        = "https://${local.api_domain_name_api_gateway}"
-    "PUBLIC_API_URI" = "https://${local.api_domain_name_cloudfront}"
-  }
+  lambda_environment = {}
 }
 
 generate "main" {
@@ -120,10 +116,12 @@ inputs = {
   apigateway_domain_name = local.domain_name_api_gateway
   apigateway_routes      = local.apigateway_routes
 
-  lambda_source_file     = "./tmp/lambda/index.mjs"
-  lambda_src_bucket_name = "hearchco-ssr-lambda-src-${local.environment}"
-  lambda_name            = "hearchco-ssr-lambda-${local.environment}"
-  lambda_environment     = local.lambda_environment
+  lambda_source_file                   = "./tmp/lambda/index.mjs"
+  lambda_src_bucket_name               = "hearchco-ssr-lambda-src-${local.environment}"
+  lambda_name                          = "hearchco-ssr-lambda-${local.environment}"
+  lambda_agent_api_gateway_domain_name = local.api_domain_name_api_gateway
+  lambda_agent_cloudfront_domain_name  = local.api_domain_name_cloudfront
+  lambda_environment                   = local.lambda_environment
 
   s3_bucket_name        = "hearchco-ssr-s3-static-${local.environment}"
   s3_static_assets_path = "./tmp/s3"
