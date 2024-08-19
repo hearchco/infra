@@ -1,3 +1,15 @@
+variable "name" {
+  description = "The name of the IAM role"
+  type        = string
+  default     = "github-oidc-auth-role"
+}
+
+variable "repository" {
+  description = "The GitHub repository to grant access to"
+  type        = string
+  default     = "hearchco/infra"
+}
+
 variable "scope" {
   description = "The scope of the access, e.g. 'ref:refs/heads/main', 'ref:refs/heads/*' or '*'"
   type        = string
