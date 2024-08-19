@@ -5,8 +5,8 @@ module "github_oidc" {
 module "github_oidc_infra_deploy_role" {
   source = "../../modules/oidc-iam-role"
 
-  name       = "github-auth-tf-state-lock"
-  repository = "hearchco/infra"
+  name       = var.name
+  repository = var.repository
   scope      = var.scope
   statements = var.statements
 }
