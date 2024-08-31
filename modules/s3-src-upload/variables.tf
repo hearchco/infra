@@ -20,12 +20,12 @@ variable "filename" {
   }
 }
 
-variable "archive_path" {
-  description = "The path to the archive file to upload"
+variable "content_base64" {
+  description = "The base64-encoded content of the source code archive file"
   type        = string
 }
 
-variable "archive_base64sha256" {
-  description = "The base64-encoded SHA256 hash of the archive file"
+variable "content_base64sha256" {
+  description = "The base64-encoded SHA256 hash of the source code archive file"
   type        = string
 }

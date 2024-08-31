@@ -2,7 +2,7 @@ resource "aws_cloudfront_function" "cf_functions" {
   for_each = merge(
     {
       for cf_function in var.default_cache_behavior.function_associations
-      : cf_function.name => cf_function
+      : cf_function.name => cf_function.content
     },
     {
       for cf_function_name, cf_functions in {
@@ -11,12 +11,12 @@ resource "aws_cloudfront_function" "cf_functions" {
           : cache_behavior.function_associations
         ])
         : cf_function.name => cf_function...
-      } : cf_function_name => cf_functions[0]
+      } : cf_function_name => cf_functions[0].content
     }
   )
 
-  name    = each.value.name
+  name    = each.key
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file(each.value.src_file_path)
+  code    = each.value
 }

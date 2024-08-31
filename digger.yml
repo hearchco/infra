@@ -1,0 +1,12 @@
+generate_projects:
+  blocks:
+    - block_name: prod
+      terragrunt: true
+      root_dir: "live/prod/"
+      workflow: default
+      workflow_file: digger_workflow_prod.yml
+    - block_name: dev
+      terragrunt: true
+      root_dir: "live/dev/"
+      workflow: default
+      workflow_file: digger_workflow_dev.yml

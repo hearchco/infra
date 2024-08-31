@@ -18,9 +18,9 @@ module "s3_src_${region_underscored}" {
 
   bucket_name          = var.lambda_src_bucket_name
   bucket_name_suffix   = module.s3_bucket_name_suffix_${region_underscored}.string
-  filename             = module.src_archiver.filename
-  archive_path         = module.src_archiver.output_path
-  archive_base64sha256 = module.src_archiver.output_base64sha256
+  filename             = local.lambda_src_key
+  content_base64       = module.src_downloader.content_base64
+  content_base64sha256 = module.src_downloader.content_base64sha256
 
   providers = {
     aws = aws.${region_underscored}
@@ -46,6 +46,7 @@ module "lambda_${region_underscored}" {
   environment = merge(
     {
       "HEARCHCO_SERVER_CACHE_DYNAMODB_REGION" = "${region_dashed}"
+      "HEARCHCO_SERVER_CACHE_DYNAMODB_TABLE" = module.dynamodb_${region_underscored}.dynamodb_table_name
     },
     local.lambda_environment
   )
@@ -79,6 +80,34 @@ module "apigateway_${region_underscored}" {
   invoke_arn    = module.lambda_${region_underscored}.invoke_arn
 
   routes = var.apigateway_routes
+
+  providers = {
+    aws = aws.${region_underscored}
+  }
+}
+
+module "dynamodb_${region_underscored}" {
+  source = "../../modules/dynamodb"
+
+  name = var.dynamodb_name
+
+  attributes = [
+    {
+      name     = "Key"
+      type     = "S"
+      hash_key = true
+    }
+    # This value is used in the application but not indexed in the database
+    # Error: all attributes must be indexed. Unused attributes: ["Value"]
+    # {
+    #   name = "Value"
+    #   type = "S"
+    # }
+  ]
+
+  ttl = {
+    enabled = true
+  }
 
   providers = {
     aws = aws.${region_underscored}

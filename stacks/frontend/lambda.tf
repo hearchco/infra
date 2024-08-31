@@ -1,10 +1,10 @@
-module "src_archiver" {
-  source = "../../modules/source-code-archiver"
+module "src_downloader" {
+  source = "../../modules/github-asset-downloader"
 
-  source_code = {
-    source_file = var.lambda_source_file
-  }
-  output_filepath = var.lambda_source_file
+  release_repository       = "frontend"
+  release_repository_owner = "hearchco"
+  release_tag              = var.release_tag
+  release_asset_name       = "hearchco_index_mjs_aws.zip"
 }
 
 module "lambda_iam" {

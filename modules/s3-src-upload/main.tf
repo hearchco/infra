@@ -26,11 +26,11 @@ resource "aws_s3_bucket_versioning" "source_code_versioning" {
 }
 
 resource "aws_s3_object" "source_code_upload" {
-  key          = var.filename
-  bucket       = aws_s3_bucket.source_code.id
-  source       = var.archive_path
-  source_hash  = var.archive_base64sha256
-  content_type = "application/zip"
+  key            = var.filename
+  bucket         = aws_s3_bucket.source_code.id
+  content_base64 = var.content_base64
+  source_hash    = var.content_base64sha256
+  content_type   = "application/zip"
 
   lifecycle {
     create_before_destroy = true

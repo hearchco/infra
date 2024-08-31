@@ -20,6 +20,7 @@ locals {
   domain_name_cloudfront  = "api.${local.domain_name}"
   domain_name_api_gateway = "gateway.${local.domain_name_cloudfront}"
 
+  cloudfront_all_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
   cloudfront_default_cache_behavior = {
     cache_policy = {
       min_ttl     = 3600   // 1 hour
@@ -27,7 +28,6 @@ locals {
       max_ttl     = 259200 // 3 days
     }
   }
-
   cloudfront_ordered_cache_behaviors = [
     {
       path_pattern = "/healthz"
@@ -46,9 +46,8 @@ locals {
       }
     },
     {
-      path_pattern    = "/suggestions"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      path_pattern    = "/search"
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 3600   // 1 hour
         default_ttl = 86400  // 1 day
@@ -56,9 +55,8 @@ locals {
       }
     },
     {
-      path_pattern    = "/search"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      path_pattern    = "/suggestions"
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 3600   // 1 hour
         default_ttl = 86400  // 1 day
@@ -67,8 +65,7 @@ locals {
     },
     {
       path_pattern    = "/proxy"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 86400   // 1 day
         default_ttl = 1296000 // 15 days
@@ -77,8 +74,7 @@ locals {
     },
     {
       path_pattern    = "/exchange"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 3600   // 1 hour
         default_ttl = 86400  // 1 day
@@ -98,7 +94,7 @@ locals {
   apigateway_routes = [for behavior in local.cloudfront_ordered_cache_behaviors : behavior.path_pattern]
 
   lambda_environment = {
-    "HEARCHCO_SERVER_FRONTENDURLS" = "http://localhost:5173,https://*${local.domain_name}"
+    "HEARCHCO_SERVER_FRONTENDURLS" = "http://localhost:5173,https://*hearchco.netlify.app,https://${local.domain_name}"
   }
 }
 
@@ -122,8 +118,8 @@ EOF
 
 inputs = {
   aws_profile    = local.aws_profile
-  aws_regions    = local.aws_regions
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
+  release_tag    = "v0.28.5"
 
   cloudfront_name                    = "hearchco-api-cloudfront-${local.environment}"
   cloudfront_domain_name             = local.domain_name_cloudfront
@@ -135,7 +131,6 @@ inputs = {
   apigateway_domain_name = local.domain_name_api_gateway
   apigateway_routes      = local.apigateway_routes
 
-  lambda_source_file     = "./tmp/bootstrap"
   lambda_src_bucket_name = "hearchco-api-lambda-src-${local.environment}"
   lambda_name            = "hearchco-api-lambda-${local.environment}"
   lambda_architecture    = "arm64"

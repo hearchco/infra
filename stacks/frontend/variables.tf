@@ -8,6 +8,11 @@ variable "hosted_zone_id" {
   type        = string
 }
 
+variable "release_tag" {
+  description = "The release tag to download & deploy"
+  type        = string
+}
+
 ##### Cloudfront variables #####
 variable "cloudfront_name" {
   description = "The name of the CloudFront distribution"
@@ -21,11 +26,6 @@ variable "cloudfront_domain_name" {
 
 variable "cloudfront_price_class" {
   description = "The price class for the CloudFront distribution"
-  type        = string
-}
-
-variable "cloudfront_cf_function_path" {
-  description = "The path to the CloudFront function source code"
   type        = string
 }
 
@@ -89,11 +89,6 @@ variable "apigateway_routes" {
 }
 
 ##### Lambda variables #####
-variable "lambda_source_file" {
-  description = "The path to the source code file"
-  type        = string
-}
-
 variable "lambda_src_bucket_name" {
   description = "The name of the bucket to upload the source code to"
   type        = string

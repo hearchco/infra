@@ -1,3 +1,12 @@
+module "cdn_src_downloader" {
+  source = "../../modules/github-asset-downloader"
+
+  release_repository       = "frontend"
+  release_repository_owner = "hearchco"
+  release_tag              = var.release_tag
+  release_asset_name       = "hearchco_cf_index_aws.js"
+}
+
 module "cdn_certificate" {
   source = "../../modules/acm-certificate"
 
@@ -42,8 +51,8 @@ module "cdn" {
     cache_policy     = var.cloudfront_default_cache_behavior.cache_policy
 
     function_associations = [{
-      name          = "sveltekit-rewriter"
-      src_file_path = var.cloudfront_cf_function_path
+      name    = "sveltekit-rewriter"
+      content = module.cdn_src_downloader.content
     }]
   }
 
@@ -66,8 +75,8 @@ module "cdn" {
         cache_policy     = behavior.cache_policy
 
         function_associations = [{
-          name          = "sveltekit-rewriter"
-          src_file_path = var.cloudfront_cf_function_path
+          name    = "sveltekit-rewriter"
+          content = module.cdn_src_downloader.content
         }]
       }
     ]

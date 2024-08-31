@@ -3,13 +3,13 @@ variable "aws_profile" {
   type        = string
 }
 
-variable "aws_regions" {
-  description = "The regions to deploy the stack to (used only for DynamoDB global tables)"
-  type        = set(string)
-}
-
 variable "hosted_zone_id" {
   description = "The ID of the hosted zone for the domain name"
+  type        = string
+}
+
+variable "release_tag" {
+  description = "The release tag to download & deploy"
   type        = string
 }
 
@@ -75,11 +75,6 @@ variable "apigateway_routes" {
 }
 
 ##### Lambda variables #####
-variable "lambda_source_file" {
-  description = "The path to the source code file"
-  type        = string
-}
-
 variable "lambda_src_bucket_name" {
   description = "The name of the bucket to upload the source code to"
   type        = string
