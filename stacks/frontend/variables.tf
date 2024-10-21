@@ -13,6 +13,18 @@ variable "release_tag" {
   type        = string
 }
 
+variable "release_repository" {
+  description = "The repository to download the release from"
+  type        = string
+  default     = "frontend"
+}
+
+variable "release_repository_owner" {
+  description = "The owner of the repository to download the release from"
+  type        = string
+  default     = "hearchco"
+}
+
 ##### Cloudfront variables #####
 variable "cloudfront_name" {
   description = "The name of the CloudFront distribution"

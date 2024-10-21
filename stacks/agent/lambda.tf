@@ -1,8 +1,8 @@
 module "src_downloader" {
   source = "../../modules/github-asset-downloader"
 
-  release_repository       = "agent"
-  release_repository_owner = "hearchco"
+  release_repository       = var.release_repository
+  release_repository_owner = var.release_repository_owner
   release_tag              = var.release_tag
   release_asset_name       = "hearchco_bootstrap_aws_${var.lambda_architecture == "arm64" ? "arm64" : "amd64"}.zip"
 }
