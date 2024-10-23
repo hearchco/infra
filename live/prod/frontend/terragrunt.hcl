@@ -101,7 +101,7 @@ EOF
 inputs = {
   aws_profile    = local.aws_profile
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
-  release_tag    = "v0.18.0"
+  release_tag    = "v0.19.0"
 
   cloudfront_name                     = "hearchco-ssr-cloudfront-${local.environment}"
   cloudfront_domain_name              = local.domain_name_cloudfront
