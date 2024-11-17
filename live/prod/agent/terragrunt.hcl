@@ -46,7 +46,7 @@ locals {
       }
     },
     {
-      path_pattern    = "/search"
+      path_pattern    = "/search/web"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 3600   // 1 hour
@@ -55,7 +55,7 @@ locals {
       }
     },
     {
-      path_pattern    = "/suggestions"
+      path_pattern    = "/search/images"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 3600   // 1 hour
@@ -64,7 +64,16 @@ locals {
       }
     },
     {
-      path_pattern    = "/proxy"
+      path_pattern    = "/search/suggestions"
+      allowed_methods = local.cloudfront_all_methods
+      cache_policy = {
+        min_ttl     = 3600   // 1 hour
+        default_ttl = 86400  // 1 day
+        max_ttl     = 259200 // 3 days
+      }
+    },
+    {
+      path_pattern    = "/imageproxy"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
         min_ttl     = 86400   // 1 day
@@ -82,7 +91,7 @@ locals {
       }
     },
     {
-      path_pattern = "/currencies"
+      path_pattern = "/exchange/currencies"
       cache_policy = {
         min_ttl     = 3600   // 1 hour
         default_ttl = 86400  // 1 day
