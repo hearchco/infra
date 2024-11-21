@@ -15,6 +15,10 @@ resource "aws_cloudfront_origin_request_policy" "default_origin_request_policy" 
   query_strings_config {
     query_string_behavior = "all"
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
@@ -41,6 +45,10 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
     query_strings_config {
       query_string_behavior = "all"
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }
 
@@ -75,5 +83,9 @@ resource "aws_cloudfront_cache_policy" "ordered_cache_policy" {
     query_strings_config {
       query_string_behavior = "all"
     }
+  }
+
+  lifecycle {
+    create_before_destroy = true
   }
 }

@@ -23,18 +23,18 @@ locals {
   cloudfront_all_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
   cloudfront_default_cache_behavior = {
     cache_policy = {
-      min_ttl     = 3600   // 1 hour
-      default_ttl = 86400  // 1 day
-      max_ttl     = 259200 // 3 days
+      min_ttl     = 86400 // 1 day
+      default_ttl = 86400 // 1 day
+      max_ttl     = 86400 // 1 day
     }
   }
   cloudfront_ordered_cache_behaviors = [
     {
       path_pattern = "/healthz"
       cache_policy = {
-        min_ttl     = 5 // 5 seconds
-        default_ttl = 5 // 5 seconds
-        max_ttl     = 5 // 5 seconds
+        min_ttl     = 1 // 1 second
+        default_ttl = 1 // 1 second
+        max_ttl     = 1 // 1 second
       }
     },
     {
@@ -49,35 +49,35 @@ locals {
       path_pattern    = "/search/web"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 1 // 1 second
+        default_ttl = 1 // 1 second
+        max_ttl     = 1 // 1 second
       }
     },
     {
       path_pattern    = "/search/images"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 1 // 1 second
+        default_ttl = 1 // 1 second
+        max_ttl     = 1 // 1 second
       }
     },
     {
       path_pattern    = "/search/suggestions"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 86400 // 1 day
+        default_ttl = 86400 // 1 day
+        max_ttl     = 86400 // 1 day
       }
     },
     {
       path_pattern    = "/imageproxy"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 86400   // 1 day
-        default_ttl = 1296000 // 15 days
+        min_ttl     = 2592000 // 30 days
+        default_ttl = 2592000 // 30 days
         max_ttl     = 2592000 // 30 days
       }
     },
@@ -85,17 +85,17 @@ locals {
       path_pattern    = "/exchange"
       allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 86400 // 1 day
+        default_ttl = 86400 // 1 day
+        max_ttl     = 86400 // 1 day
       }
     },
     {
       path_pattern = "/exchange/currencies"
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 86400 // 1 day
+        default_ttl = 86400 // 1 day
+        max_ttl     = 86400 // 1 day
       }
     }
   ]
@@ -128,7 +128,7 @@ EOF
 inputs = {
   aws_profile    = local.aws_profile
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
-  release_tag    = "v0.32.0"
+  release_tag    = "v0.32.1"
 
   cloudfront_name                    = "hearchco-api-cloudfront-${local.environment}"
   cloudfront_domain_name             = local.domain_name_cloudfront

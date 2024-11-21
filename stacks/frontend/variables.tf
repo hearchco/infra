@@ -126,7 +126,7 @@ variable "lambda_handler" {
 variable "lambda_memory_size" {
   description = "The amount of memory to allocate to the Lambda function"
   type        = number
-  default     = 3008
+  default     = 1769 # 2vCPUs with max 1 core 100% utilization
 }
 
 variable "lambda_architecture" {

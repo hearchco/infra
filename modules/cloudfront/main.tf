@@ -96,4 +96,9 @@ resource "aws_cloudfront_distribution" "cdn" {
       restriction_type = "none"
     }
   }
+
+  depends_on = [
+    aws_cloudfront_cache_policy.default_cache_policy,
+    aws_cloudfront_cache_policy.ordered_cache_policy
+  ]
 }
