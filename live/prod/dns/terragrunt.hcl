@@ -51,18 +51,6 @@ locals {
       type    = "TXT",
       ttl     = 60,
       records = ["390ffbc03eb0af048b8fbd64c099da"]
-    },
-    // dev.hearch.co
-    {
-      name = "dev",
-      type = "NS",
-      ttl  = 86400,
-      records = [
-        "ns-501.awsdns-62.com",
-        "ns-1284.awsdns-32.org",
-        "ns-681.awsdns-21.net",
-        "ns-1913.awsdns-47.co.uk"
-      ]
     }
   ]
 }

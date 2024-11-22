@@ -24,55 +24,53 @@ locals {
 
   cloudfront_default_cache_behavior = {
     cache_policy = {
-      min_ttl     = 3600   // 1 hour
-      default_ttl = 86400  // 1 day
-      max_ttl     = 259200 // 3 days
+      min_ttl     = 86400 // 1 day
+      default_ttl = 86400 // 1 day
+      max_ttl     = 86400 // 1 day
     }
   }
 
+  cloudfront_all_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
   cloudfront_s3_static_cache_behavior = {
     cache_policy = {
-      min_ttl     = 86400   // 1 day
-      default_ttl = 1296000 // 15 days
+      min_ttl     = 2592000 // 30 days
+      default_ttl = 2592000 // 30 days
       max_ttl     = 2592000 // 30 days
     }
   }
-
   cloudfront_ordered_cache_behaviors = [
     {
       path_pattern = "/healthz"
       cache_policy = {
-        min_ttl     = 5 // 5 seconds
-        default_ttl = 5 // 5 seconds
-        max_ttl     = 5 // 5 seconds
+        min_ttl     = 1 // 1 second
+        default_ttl = 1 // 1 second
+        max_ttl     = 1 // 1 second
       }
     },
     {
       path_pattern = "/"
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 86400 // 1 day
+        default_ttl = 86400 // 1 day
+        max_ttl     = 86400 // 1 day
       }
     },
     {
       path_pattern    = "/opensearch.xml"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 86400 // 1 day
+        default_ttl = 86400 // 1 day
+        max_ttl     = 86400 // 1 day
       }
     },
     {
       path_pattern    = "/search"
-      allowed_methods = ["GET", "HEAD", "OPTIONS", "DELETE", "POST", "PUT", "PATCH"]
-      cached_methods  = ["GET", "HEAD"]
+      allowed_methods = local.cloudfront_all_methods
       cache_policy = {
-        min_ttl     = 3600   // 1 hour
-        default_ttl = 86400  // 1 day
-        max_ttl     = 259200 // 3 days
+        min_ttl     = 1 // 1 second
+        default_ttl = 1 // 1 second
+        max_ttl     = 1 // 1 second
       }
     }
   ]
@@ -103,11 +101,11 @@ EOF
 inputs = {
   aws_profile    = local.aws_profile
   hosted_zone_id = dependency.dns.outputs.hosted_zone_id
+  release_tag    = "v0.21.1"
 
   cloudfront_name                     = "hearchco-ssr-cloudfront-${local.environment}"
   cloudfront_domain_name              = local.domain_name_cloudfront
   cloudfront_price_class              = "PriceClass_All"
-  cloudfront_cf_function_path         = "./tmp/cloudfront/index.js"
   cloudfront_default_cache_behavior   = local.cloudfront_default_cache_behavior
   cloudfront_s3_static_cache_behavior = local.cloudfront_s3_static_cache_behavior
   cloudfront_ordered_cache_behaviors  = local.cloudfront_ordered_cache_behaviors
@@ -116,7 +114,6 @@ inputs = {
   apigateway_domain_name = local.domain_name_api_gateway
   apigateway_routes      = local.apigateway_routes
 
-  lambda_source_file                   = "./tmp/lambda/index.mjs"
   lambda_src_bucket_name               = "hearchco-ssr-lambda-src-${local.environment}"
   lambda_name                          = "hearchco-ssr-lambda-${local.environment}"
   lambda_agent_api_gateway_domain_name = local.api_domain_name_api_gateway
@@ -125,5 +122,5 @@ inputs = {
   lambda_keep_warm                     = true
 
   s3_bucket_name        = "hearchco-ssr-s3-static-${local.environment}"
-  s3_static_assets_path = "./tmp/s3"
+  s3_static_assets_path = "./tmp/hearchco_s3_assets_aws"
 }

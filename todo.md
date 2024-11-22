@@ -1,4 +1,0 @@
-- [ ] agent: switch to github release binary provider instead of local file
-- [ ] frontend: publish build in github release https://github.com/Shopify/upload-to-release, and ^^
-- [ ] ci/cd: digger for both frontend and agent
-- [ ] ci/cd: github dispatches to trigger digger

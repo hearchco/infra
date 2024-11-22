@@ -1,0 +1,40 @@
+name: Digger Workflow
+
+on:
+  workflow_dispatch:
+  inputs:
+    spec:
+      required: true
+    run_name:
+      required: false
+
+run-name: "${{inputs.run_name}}"
+
+jobs:
+  digger-job:
+    runs-on: ubuntu-latest
+    environment: dev
+    permissions:
+      contents: write # required to merge PRs
+      actions: write # required for plan persistence
+      id-token: write # required for workload-identity-federation
+      pull-requests: write # required to post PR comments
+      statuses: write # required to validate combined PR status
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: ${{ fromJSON(github.event.inputs.spec).job_id }}
+        run: echo "job id ${{ fromJSON(github.event.inputs.spec).job_id }}"
+      - uses: diggerhq/digger@v0.6.36
+        with:
+          digger-spec: ${{ inputs.spec }}
+          setup-opentofu: true
+          opentofu-version: v1.8.1
+          setup-terragrunt: true
+          terragrunt-version: 0.66.4
+          setup-aws: true
+          aws-role-to-assume: arn:aws:iam::891377085136_Admin:role/github-oidc-auth-role
+          aws-region: eu-central-1
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -18,9 +18,9 @@ module "s3_src_${region_underscored}" {
 
   bucket_name          = var.lambda_src_bucket_name
   bucket_name_suffix   = module.s3_bucket_name_suffix_${region_underscored}.string
-  filename             = module.src_archiver.filename
-  archive_path         = module.src_archiver.output_path
-  archive_base64sha256 = module.src_archiver.output_base64sha256
+  filename             = local.lambda_src_key
+  content_base64       = module.src_downloader.content_base64
+  content_base64sha256 = module.src_downloader.content_base64sha256
 
   providers = {
     aws = aws.${region_underscored}

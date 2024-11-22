@@ -116,9 +116,9 @@ variable "default_cache_behavior" {
     })
 
     function_associations = optional(set(object({
-      name          = string
-      src_file_path = string
-      event_type    = optional(string, "viewer-request")
+      name       = string
+      content    = string
+      event_type = optional(string, "viewer-request")
     })), [])
 
     lambda_function_associations = optional(set(object({
@@ -145,9 +145,9 @@ variable "ordered_cache_behaviors" {
     })
 
     function_associations = optional(set(object({
-      name          = string
-      src_file_path = string
-      event_type    = optional(string, "viewer-request")
+      name       = string
+      content    = string
+      event_type = optional(string, "viewer-request")
     })), [])
 
     lambda_function_associations = optional(set(object({
