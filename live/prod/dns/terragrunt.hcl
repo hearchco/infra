@@ -51,6 +51,19 @@ locals {
       type    = "TXT",
       ttl     = 60,
       records = ["390ffbc03eb0af048b8fbd64c099da"]
+    },
+    // Updown
+    {
+      name    = "status",
+      type    = "CNAME",
+      ttl     = 86400,
+      records = ["page.updown.io"]
+    },
+    {
+      name    = "_updown.status",
+      type    = "TXT",
+      ttl     = 60,
+      records = ["updown-page=p/az8oo"]
     }
   ]
 }
