@@ -64,30 +64,6 @@ locals {
       type    = "TXT",
       ttl     = 60,
       records = ["updown-page=p/az8oo"]
-    },
-    {
-      name    = "frontend.status",
-      type    = "CNAME",
-      ttl     = 86400,
-      records = ["page.updown.io"]
-    },
-    {
-      name    = "_updown.frontend.status",
-      type    = "TXT",
-      ttl     = 60,
-      records = ["updown-page=p/jmv8"]
-    },
-    {
-      name    = "api.status",
-      type    = "CNAME",
-      ttl     = 86400,
-      records = ["page.updown.io"]
-    },
-    {
-      name    = "_updown.api.status",
-      type    = "TXT",
-      ttl     = 60,
-      records = ["updown-page=p/1wk3"]
     }
   ]
 }
